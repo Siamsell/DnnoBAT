@@ -1,0 +1,1635 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>نظام إدارة الموظفين</title>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-light: #F2A516;
+            --primary: #080d4e;
+            --secondary: #F2A516;
+            --dark: #1a1a2e;
+            --light: #f8f9fa;
+            --success: #4cc9f0;
+            --danger: #f72585;
+            --warning: #f8961e;
+            --info: #4895ef;
+            --gray: #adb5bd;
+            --gray-dark: #495057;
+            --glass: rgba(255, 255, 255, 0.2);
+            --glass-border: rgba(255, 255, 255, 0.3);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Tajawal', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4e8f0 100%);
+            color: var(--dark);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 2rem auto;
+            padding: 0 1.5rem;
+        }
+        
+        .glass-card {
+            background: var(--glass);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-radius: 20px;
+            border: 1px solid var(--glass-border);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            margin-bottom: 2rem;
+            transition: all 0.3s ease;
+        }
+        
+        .glass-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+        }
+        
+        .card-header {
+            padding: 1.5rem;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            display: flex;
+            align-items: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .card-header i {
+            margin-left: 12px;
+            font-size: 1.4rem;
+        }
+        
+        .card-body {
+            padding: 2rem;
+            background: rgba(255, 255, 255, 0.9);
+        }
+        
+        h1 {
+            color: var(--dark);
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+            text-align: center;
+            position: relative;
+            font-size: 2.5rem;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .section-title {
+            font-size: 1.3rem;
+            color: var(--primary);
+            margin: 1.5rem 0;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--primary-light);
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+        }
+        
+        .section-title i {
+            margin-left: 10px;
+            color: var(--secondary);
+        }
+        
+        .btn {
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 1rem;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            box-shadow: 0 4px 15px rgba(67, 97, 238, 0.3);
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(67, 97, 238, 0.4);
+        }
+        
+        .btn-success {
+            background: linear-gradient(135deg, var(--success), #3aa8d1);
+            color: white;
+            box-shadow: 0 4px 15px rgba(76, 201, 240, 0.3);
+        }
+        
+        .btn-danger {
+            background: linear-gradient(135deg, var(--danger), #d41a6a);
+            color: white;
+            box-shadow: 0 4px 15px rgba(247, 37, 133, 0.3);
+        }
+        
+        .btn-warning {
+            background: linear-gradient(135deg, var(--warning), #e0871b);
+            color: white;
+            box-shadow: 0 4px 15px rgba(248, 150, 30, 0.3);
+        }
+        
+        .btn-info {
+            background: linear-gradient(135deg, var(--info), #3a7bc8);
+            color: white;
+            box-shadow: 0 4px 15px rgba(72, 149, 239, 0.3);
+        }
+        
+        .btn-back {
+            background: rgba(255, 255, 255, 0.9);
+            color: var(--primary);
+            border: 1px solid var(--primary-light);
+            padding: 0.7rem 1.5rem;
+            border-radius: 10px;
+            font-weight: 600;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 1.5rem;
+        }
+        
+        .btn-back i {
+            margin-right: 8px;
+            transition: transform 0.3s;
+        }
+        
+        .btn-back:hover {
+            background: white;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+            color: var(--secondary);
+        }
+        
+        .btn-back:hover i {
+            transform: translateX(-3px);
+        }
+        
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        
+        .employee-card {
+            position: relative;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s;
+            border-left: 4px solid var(--primary);
+        }
+        
+        .employee-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        }
+        
+        .employee-card.admin {
+            border-left-color: var(--warning);
+        }
+        
+        .employee-card.manager {
+            border-left-color: var(--info);
+        }
+        
+        .employee-card.agent {
+            border-left-color: var(--success);
+        }
+        
+        .employee-name {
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: var(--dark);
+        }
+        
+        .employee-info {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-bottom: 15px;
+        }
+        
+        .employee-info div {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.95rem;
+        }
+        
+        .employee-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .badge {
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        
+        .badge-primary {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .badge-success {
+            background-color: var(--success);
+            color: white;
+        }
+        
+        .badge-warning {
+            background-color: var(--warning);
+            color: white;
+        }
+        
+        .badge-danger {
+            background-color: var(--danger);
+            color: white;
+        }
+        
+        .badge-info {
+            background-color: var(--info);
+            color: white;
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .modal-content {
+            background-color: white;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 800px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+        
+        .modal-header {
+            padding: 1.5rem;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top-left-radius: 15px;
+            border-top-right-radius: 15px;
+        }
+        
+        .modal-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin: 0;
+        }
+        
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: white;
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+            padding: 0 1.5rem;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--dark);
+        }
+        
+        input, select, textarea {
+            width: 100%;
+            padding: 0.8rem 1rem;
+            border: 1px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+        
+        input:focus, select:focus, textarea:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 0.25rem rgba(67, 97, 238, 0.15);
+            outline: none;
+        }
+        
+        .form-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 20px;
+            padding: 0 1.5rem 1.5rem;
+        }
+        
+        .activity-list {
+            margin-top: 1.5rem;
+            padding: 0 1.5rem;
+        }
+        
+        .activity-item {
+            padding: 1rem;
+            border-left: 3px solid var(--info);
+            margin-bottom: 1rem;
+            background-color: #f8f9fa;
+            border-radius: 10px;
+        }
+        
+        .activity-item.login {
+            border-left-color: var(--success);
+        }
+        
+        .activity-item.property {
+            border-left-color: var(--primary);
+        }
+        
+        .activity-item.sale {
+            border-left-color: var(--warning);
+        }
+        
+        .activity-item.salary {
+            border-left-color: var(--danger);
+        }
+        
+        .activity-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+        
+        .activity-date {
+            font-size: 0.8rem;
+            color: var(--gray-dark);
+        }
+        
+        .search-container {
+            margin-bottom: 2rem;
+            display: flex;
+            gap: 1rem;
+        }
+        
+        .search-input {
+            flex: 1;
+            padding: 0.8rem 1.5rem;
+            border: 1px solid #e0e0e0;
+            border-radius: 50px;
+            font-size: 1rem;
+            transition: all 0.3s;
+            background-color: rgba(255, 255, 255, 0.8);
+        }
+        
+        .search-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 0.25rem rgba(67, 97, 238, 0.15);
+        }
+        
+        .search-btn {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            padding: 0 1.5rem;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .search-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+        }
+
+        .stats-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .stat-card {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 15px;
+            padding: 1.5rem;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        }
+        
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin: 0.5rem 0;
+        }
+        
+        .stat-label {
+            font-size: 1rem;
+            color: var(--gray-dark);
+            font-weight: 600;
+        }
+        
+        .permissions-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+        
+        .permission-item {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 10px;
+            padding: 1rem;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+            border-left: 3px solid var(--primary);
+        }
+        
+        .tabs {
+            display: flex;
+            border-bottom: 1px solid #ddd;
+            margin-bottom: 1.5rem;
+        }
+        
+        .tab {
+            padding: 0.8rem 1.5rem;
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s;
+            font-weight: 600;
+        }
+        
+        .tab.active {
+            border-bottom-color: var(--primary);
+            color: var(--primary);
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .performance-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        
+        .performance-stat {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 10px;
+            padding: 1rem;
+            text-align: center;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+        }
+        
+        .performance-value {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin: 0.5rem 0;
+        }
+        
+        .performance-label {
+            font-size: 0.9rem;
+            color: var(--gray-dark);
+        }
+        
+        .attendance-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+        
+        .attendance-table th, .attendance-table td {
+            padding: 0.8rem;
+            text-align: center;
+            border: 1px solid #ddd;
+        }
+        
+        .attendance-table th {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .attendance-table tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        
+        .present {
+            color: var(--success);
+            font-weight: bold;
+        }
+        
+        .absent {
+            color: var(--danger);
+            font-weight: bold;
+        }
+        
+        .salary-form {
+            margin-top: 1.5rem;
+        }
+        
+        .salary-details {
+            margin-top: 1.5rem;
+            padding: 1rem;
+            background-color: #f8f9fa;
+            border-radius: 10px;
+        }
+        
+        @media (max-width: 768px) {
+            .grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .stats-container {
+                grid-template-columns: 1fr 1fr;
+            }
+            
+            .employee-actions {
+                flex-direction: column;
+            }
+            
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .tabs {
+                flex-direction: column;
+            }
+            
+            .tab {
+                border-bottom: none;
+                border-left: 3px solid transparent;
+            }
+            
+            .tab.active {
+                border-bottom-color: transparent;
+                border-left-color: var(--primary);
+            }
+        }
+
+        /* Animation de chargement */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .glass-card {
+            animation: fadeIn 0.5s ease-out forwards;
+        }
+        
+        /* Effet de flottement pour les cartes */
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+        
+        .glass-card:hover {
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        /* Style pour les onglets dans le modal */
+        .modal-tabs {
+            display: flex;
+            border-bottom: 1px solid #ddd;
+            margin: 0 1.5rem;
+        }
+        
+        .modal-tab {
+            padding: 0.8rem 1.5rem;
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s;
+            font-weight: 600;
+        }
+        
+        .modal-tab.active {
+            border-bottom-color: var(--primary);
+            color: var(--primary);
+        }
+        
+        .modal-tab-content {
+            display: none;
+            padding: 0 1.5rem;
+        }
+        
+        .modal-tab-content.active {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <button onclick="window.location.href='admin.html'" class="btn-back">
+            <i class="fas fa-arrow-right"></i>
+            العودة
+        </button>
+        
+        <h1 class="my-4"><i class="fas fa-users-cog"></i> نظام إدارة الموظفين</h1>
+
+        <div class="search-container">
+            <input type="text" class="search-input" placeholder="ابحث عن الموظفين..." id="employeeSearch" oninput="searchEmployees(this.value)">
+            <button class="search-btn">
+                <i class="fas fa-search"></i>
+            </button>
+        </div>
+
+        <div class="stats-container">
+            <div class="stat-card">
+                <div class="stat-label">إجمالي الموظفين</div>
+                <div class="stat-value" id="total-employees">0</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">المدراء</div>
+                <div class="stat-value" id="managers">0</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">الوكلاء</div>
+                <div class="stat-value" id="agents">0</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">المشرفين</div>
+                <div class="stat-value" id="admins">0</div>
+            </div>
+        </div>
+        
+        <div class="glass-card">
+            <div class="card-header">
+                <i class="fas fa-users"></i>
+                <h2>قائمة الموظفين</h2>
+            </div>
+            <div class="card-body">
+                <button class="btn btn-primary mb-4" onclick="openEmployeeModal()">
+                    <i class="fas fa-plus"></i> إضافة موظف جديد
+                </button>
+                
+                <div class="grid" id="employees-grid">
+                    <!-- Employees will be loaded here -->
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Employee Modal -->
+    <div class="modal" id="employeeModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title" id="modalTitle">إضافة موظف جديد</h2>
+                <button class="close-btn" onclick="closeModal()">&times;</button>
+            </div>
+            
+            <div class="modal-tabs">
+                <div class="modal-tab active" onclick="switchTab('info')">المعلومات الأساسية</div>
+                <div class="modal-tab" onclick="switchTab('permissions')">الصلاحيات</div>
+                <div class="modal-tab" onclick="switchTab('activities')">سجل النشاطات</div>
+                <div class="modal-tab" onclick="switchTab('performance')">متابعة الأداء</div>
+                <div class="modal-tab" onclick="switchTab('attendance')">الحضور والانصراف</div>
+                <div class="modal-tab" onclick="switchTab('salary')">الرواتب والحوافز</div>
+            </div>
+            
+            <form id="employeeForm">
+                <input type="hidden" id="employeeId">
+                
+                <!-- Info Tab -->
+                <div class="modal-tab-content active" id="info-tab">
+                    <div class="form-group">
+                        <label for="nom">اسم الموظف</label>
+                        <input type="text" id="nom" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="position">المنصب</label>
+                        <select id="position" required>
+                            <option value="admin">مشرف</option>
+                            <option value="manager">مدير</option>
+                            <option value="agent">وكيل عقاري</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="telephone">رقم الهاتف</label>
+                        <input type="text" id="telephone" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">البريد الإلكتروني</label>
+                        <input type="email" id="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="hire_date">تاريخ التوظيف</label>
+                        <input type="date" id="hire_date" required>
+                    </div>
+                </div>
+                
+                <!-- Permissions Tab -->
+                <div class="modal-tab-content" id="permissions-tab">
+                    <div class="permissions-container">
+                        <div class="permission-item">
+                            <h4>العقارات</h4>
+                            <div class="form-group">
+                                <label>
+                                    <input type="checkbox" name="property_view"> مشاهدة العقارات
+                                </label>
+                            </div>
+                            <div class="form-group">
+                                <label>
+                                    <input type="checkbox" name="property_add"> إضافة عقارات
+                                </label>
+                            </div>
+                            <div class="form-group">
+                                <label>
+                                    <input type="checkbox" name="property_edit"> تعديل العقارات
+                                </label>
+                            </div>
+                            <div class="form-group">
+                                <label>
+                                    <input type="checkbox" name="property_delete"> حذف العقارات
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <div class="permission-item">
+                            <h4>الزبائن</h4>
+                            <div class="form-group">
+                                <label>
+                                    <input type="checkbox" name="client_view"> مشاهدة الزبائن
+                                </label>
+                            </div>
+                            <div class="form-group">
+                                <label>
+                                    <input type="checkbox" name="client_add"> إضافة زبائن
+                                </label>
+                            </div>
+                            <div class="form-group">
+                                <label>
+                                    <input type="checkbox" name="client_edit"> تعديل الزبائن
+                                </label>
+                            </div>
+                            <div class="form-group">
+                                <label>
+                                    <input type="checkbox" name="client_delete"> حذف الزبائن
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <div class="permission-item">
+                            <h4>المعاملات</h4>
+                            <div class="form-group">
+                                <label>
+                                    <input type="checkbox" name="sale_view"> مشاهدة المعاملات
+                                </label>
+                            </div>
+                            <div class="form-group">
+                                <label>
+                                    <input type="checkbox" name="sale_add"> إضافة معاملات
+                                </label>
+                            </div>
+                            <div class="form-group">
+                                <label>
+                                    <input type="checkbox" name="sale_edit"> تعديل المعاملات
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <div class="permission-item">
+                            <h4>الموظفين</h4>
+                            <div class="form-group">
+                                <label>
+                                    <input type="checkbox" name="employee_view"> مشاهدة الموظفين
+                                </label>
+                            </div>
+                            <div class="form-group">
+                                <label>
+                                    <input type="checkbox" name="employee_add"> إضافة موظفين
+                                </label>
+                            </div>
+                            <div class="form-group">
+                                <label>
+                                    <input type="checkbox" name="employee_edit"> تعديل الموظفين
+                                </label>
+                            </div>
+                            <div class="form-group">
+                                <label>
+                                    <input type="checkbox" name="employee_delete"> حذف الموظفين
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Activities Tab -->
+                <div class="modal-tab-content" id="activities-tab">
+                    <div id="activitiesContainer">
+                        <p class="text-center py-3">لا يوجد نشاطات مسجلة</p>
+                    </div>
+                </div>
+                
+                <!-- Performance Tab -->
+                <div class="modal-tab-content" id="performance-tab">
+                    <div class="performance-stats">
+                        <div class="performance-stat">
+                            <div class="performance-label">العقارات المضافة</div>
+                            <div class="performance-value" id="properties-added">0</div>
+                        </div>
+                        <div class="performance-stat">
+                            <div class="performance-label">صفقات البيع</div>
+                            <div class="performance-value" id="sales-completed">0</div>
+                        </div>
+                        <div class="performance-stat">
+                            <div class="performance-label">العقارات المباعة</div>
+                            <div class="performance-value" id="properties-sold">0</div>
+                        </div>
+                        <div class="performance-stat">
+                            <div class="performance-label">إجمالي المبيعات</div>
+                            <div class="performance-value" id="total-sales">0</div>
+                        </div>
+                    </div>
+                    
+                    <div class="section-title">
+                        <i class="fas fa-chart-line"></i>
+                        تقرير الأداء الشهري
+                    </div>
+                    
+                    <div id="performanceChart" style="height: 300px; margin-top: 1rem;">
+                        <!-- Chart will be rendered here -->
+                        <p class="text-center py-3">لا توجد بيانات متاحة لعرض الرسم البياني</p>
+                    </div>
+                </div>
+                
+                <!-- Attendance Tab -->
+                <div class="modal-tab-content" id="attendance-tab">
+                    <div class="form-group">
+                        <button class="btn btn-primary" onclick="recordAttendance('present')">
+                            <i class="fas fa-check-circle"></i> تسجيل حضور
+                        </button>
+                        <button class="btn btn-danger" onclick="recordAttendance('absent')">
+                            <i class="fas fa-times-circle"></i> تسجيل غياب
+                        </button>
+                    </div>
+                    
+                    <div class="section-title">
+                        <i class="fas fa-calendar-alt"></i>
+                        سجل الحضور لشهر يونيو 2025
+                    </div>
+                    
+                    <table class="attendance-table">
+                        <thead>
+                            <tr>
+                                <th>اليوم</th>
+                                <th>التاريخ</th>
+                                <th>الحالة</th>
+                                <th>وقت الدخول</th>
+                                <th>وقت الخروج</th>
+                            </tr>
+                        </thead>
+                        <tbody id="attendanceRecords">
+                            <!-- Attendance records will be loaded here -->
+                        </tbody>
+                    </table>
+                </div>
+                
+                <!-- Salary Tab -->
+                <div class="modal-tab-content" id="salary-tab">
+                    <div class="salary-details">
+                        <h4>تفاصيل الراتب</h4>
+                        <div class="employee-info">
+                            <div><span>الراتب الأساسي:</span> <span id="base-salary">0</span> درهم</div>
+                            <div><span>الحوافز:</span> <span id="bonus">0</span> درهم</div>
+                            <div><span>الخصومات:</span> <span id="deductions">0</span> درهم</div>
+                            <div><span>صافي الراتب:</span> <span id="net-salary" style="font-weight: bold;">0</span> درهم</div>
+                        </div>
+                    </div>
+                    
+                    <div class="salary-form">
+                        <div class="form-group">
+                            <label for="salary-amount">الراتب الأساسي</label>
+                            <input type="number" id="salary-amount" min="0">
+                        </div>
+                        <div class="form-group">
+                            <label for="bonus-amount">مبلغ الحافز</label>
+                            <input type="number" id="bonus-amount" min="0">
+                        </div>
+                        <div class="form-group">
+                            <label for="deduction-amount">مبلغ الخصم</label>
+                            <input type="number" id="deduction-amount" min="0">
+                        </div>
+                        <div class="form-group">
+                            <label for="salary-notes">ملاحظات</label>
+                            <textarea id="salary-notes" rows="3"></textarea>
+                        </div>
+                        <div class="form-actions">
+                            <button type="button" class="btn btn-primary" onclick="updateSalary()">حفظ التعديلات</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-actions">
+                    <button type="button" class="btn btn-danger" onclick="closeModal()">إلغاء</button>
+                    <button type="submit" class="btn btn-primary">حفظ</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <script>
+        let employees = [];
+        let currentEmployeeId = null;
+        
+        // Load employees when page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            fetchEmployees();
+        });
+        
+        // Switch between tabs in modal
+        function switchTab(tabName) {
+            // Hide all tab contents
+            document.querySelectorAll('.modal-tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Deactivate all tabs
+            document.querySelectorAll('.modal-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Activate selected tab
+            document.getElementById(`${tabName}-tab`).classList.add('active');
+            
+            // Highlight selected tab button
+            const tabs = document.querySelectorAll('.modal-tab');
+            for (let tab of tabs) {
+                if (tab.textContent.includes(getTabTitle(tabName))) {
+                    tab.classList.add('active');
+                    break;
+                }
+            }
+            
+            // Load data for the selected tab if needed
+            if (tabName === 'activities' && currentEmployeeId) {
+                loadActivities(currentEmployeeId);
+            } else if (tabName === 'performance' && currentEmployeeId) {
+                loadPerformanceData(currentEmployeeId);
+            } else if (tabName === 'attendance' && currentEmployeeId) {
+                loadAttendanceRecords(currentEmployeeId);
+            } else if (tabName === 'salary' && currentEmployeeId) {
+                loadSalaryData(currentEmployeeId);
+            }
+        }
+        
+        function getTabTitle(tabName) {
+            const titles = {
+                'info': 'المعلومات الأساسية',
+                'permissions': 'الصلاحيات',
+                'activities': 'سجل النشاطات',
+                'performance': 'متابعة الأداء',
+                'attendance': 'الحضور والانصراف',
+                'salary': 'الرواتب والحوافز'
+            };
+            return titles[tabName] || '';
+        }
+        
+        // Fetch all employees
+        async function fetchEmployees() {
+            try {
+                // Simulate API call
+                // In a real app, you would fetch from your backend
+                employees = [
+                    {
+                        id: 1,
+                        nom: "أحمد محمد",
+                        position: "admin",
+                        telephone: "0612345678",
+                        email: "ahmed@example.com",
+                        hire_date: "2023-01-15",
+                        permissions: {
+                            property_view: true,
+                            property_add: true,
+                            property_edit: true,
+                            property_delete: true,
+                            client_view: true,
+                            client_add: true,
+                            client_edit: true,
+                            client_delete: true,
+                            sale_view: true,
+                            sale_add: true,
+                            sale_edit: true,
+                            employee_view: true,
+                            employee_add: true,
+                            employee_edit: true,
+                            employee_delete: true
+                        },
+                        salary: {
+                            base: 15000,
+                            bonus: 2000,
+                            deductions: 500
+                        }
+                    },
+                    {
+                        id: 2,
+                        nom: "سارة علي",
+                        position: "manager",
+                        telephone: "0623456789",
+                        email: "sara@example.com",
+                        hire_date: "2023-03-20",
+                        permissions: {
+                            property_view: true,
+                            property_add: true,
+                            property_edit: true,
+                            property_delete: false,
+                            client_view: true,
+                            client_add: true,
+                            client_edit: true,
+                            client_delete: false,
+                            sale_view: true,
+                            sale_add: true,
+                            sale_edit: true,
+                            employee_view: true,
+                            employee_add: false,
+                            employee_edit: false,
+                            employee_delete: false
+                        },
+                        salary: {
+                            base: 12000,
+                            bonus: 1500,
+                            deductions: 300
+                        }
+                    },
+                    {
+                        id: 3,
+                        nom: "عمر خالد",
+                        position: "agent",
+                        telephone: "0634567890",
+                        email: "omar@example.com",
+                        hire_date: "2023-05-10",
+                        permissions: {
+                            property_view: true,
+                            property_add: true,
+                            property_edit: true,
+                            property_delete: false,
+                            client_view: true,
+                            client_add: true,
+                            client_edit: true,
+                            client_delete: false,
+                            sale_view: true,
+                            sale_add: true,
+                            sale_edit: false,
+                            employee_view: false,
+                            employee_add: false,
+                            employee_edit: false,
+                            employee_delete: false
+                        },
+                        salary: {
+                            base: 8000,
+                            bonus: 1000,
+                            deductions: 200
+                        }
+                    }
+                ];
+                
+                renderEmployees(employees);
+                updateStats();
+            } catch (error) {
+                console.error('Error fetching employees:', error);
+            }
+        }
+        
+        // Search employees
+        async function searchEmployees(query) {
+            if (!query) {
+                renderEmployees(employees);
+                return;
+            }
+            
+            const filtered = employees.filter(employee => 
+                employee.nom.toLowerCase().includes(query.toLowerCase()) ||
+                employee.telephone.includes(query) ||
+                (employee.email && employee.email.toLowerCase().includes(query.toLowerCase()))
+            );
+            
+            renderEmployees(filtered);
+        }
+        
+        // Render employees to the grid
+        function renderEmployees(employeesToRender) {
+            const grid = document.getElementById('employees-grid');
+            grid.innerHTML = '';
+            
+            if (employeesToRender.length === 0) {
+                grid.innerHTML = '<p class="text-center w-100 py-3">لا يوجد موظفين لعرضهم</p>';
+                return;
+            }
+            
+            employeesToRender.forEach(employee => {
+                const employeeCard = document.createElement('div');
+                employeeCard.className = `employee-card ${employee.position}`;
+                
+                let positionText = '';
+                switch(employee.position) {
+                    case 'admin': positionText = 'مشرف'; break;
+                    case 'manager': positionText = 'مدير'; break;
+                    case 'agent': positionText = 'وكيل عقاري'; break;
+                }
+                
+                let positionClass = '';
+                switch(employee.position) {
+                    case 'admin': positionClass = 'badge-warning'; break;
+                    case 'manager': positionClass = 'badge-info'; break;
+                    case 'agent': positionClass = 'badge-success'; break;
+                }
+                
+                employeeCard.innerHTML = `
+                    <div class="employee-name">${employee.nom}</div>
+                    <div class="employee-info">
+                        <div><i class="fas fa-briefcase"></i> <span class="badge ${positionClass}">${positionText}</span></div>
+                        <div><i class="fas fa-phone"></i> ${employee.telephone}</div>
+                        <div><i class="fas fa-envelope"></i> ${employee.email}</div>
+                        <div><i class="fas fa-calendar-alt"></i> تاريخ التوظيف: ${new Date(employee.hire_date).toLocaleDateString()}</div>
+                    </div>
+                    <div class="employee-actions">
+                        <button class="btn btn-info" onclick="viewEmployee(${employee.id})">
+                            <i class="fas fa-eye"></i> عرض التفاصيل
+                        </button>
+                        <button class="btn btn-success" onclick="editEmployee(${employee.id})">
+                            <i class="fas fa-edit"></i> تعديل
+                        </button>
+                        <button class="btn btn-danger" onclick="deleteEmployee(${employee.id})">
+                            <i class="fas fa-trash"></i> حذف
+                        </button>
+                    </div>
+                `;
+                
+                grid.appendChild(employeeCard);
+            });
+        }
+        
+        // Update statistics
+        function updateStats() {
+            document.getElementById('total-employees').textContent = employees.length;
+            document.getElementById('managers').textContent = employees.filter(e => e.position === 'manager').length;
+            document.getElementById('agents').textContent = employees.filter(e => e.position === 'agent').length;
+            document.getElementById('admins').textContent = employees.filter(e => e.position === 'admin').length;
+        }
+        
+        // Open modal for adding new employee
+        function openEmployeeModal() {
+            document.getElementById('modalTitle').textContent = 'إضافة موظف جديد';
+            document.getElementById('employeeForm').reset();
+            document.getElementById('employeeId').value = '';
+            currentEmployeeId = null;
+            
+            // Reset tabs to first tab
+            switchTab('info');
+            
+            document.getElementById('employeeModal').style.display = 'flex';
+        }
+        
+        // View employee details
+        async function viewEmployee(id) {
+            const employee = employees.find(e => e.id == id);
+            if (!employee) return;
+            
+            currentEmployeeId = id;
+            document.getElementById('modalTitle').textContent = `تفاصيل الموظف: ${employee.nom}`;
+            document.getElementById('employeeId').value = employee.id;
+            
+            // Fill form with employee data but disable fields
+            document.getElementById('nom').value = employee.nom;
+            document.getElementById('position').value = employee.position;
+            document.getElementById('telephone').value = employee.telephone;
+            document.getElementById('email').value = employee.email;
+            document.getElementById('hire_date').value = employee.hire_date.split('T')[0];
+            
+            // Disable form fields
+            const form = document.getElementById('employeeForm');
+            const inputs = form.querySelectorAll('input, select, textarea');
+            inputs.forEach(input => input.disabled = true);
+            
+            // Load permissions
+            if (employee.permissions) {
+                for (const [key, value] of Object.entries(employee.permissions)) {
+                    const checkbox = document.querySelector(`input[name="${key}"]`);
+                    if (checkbox) checkbox.checked = value;
+                }
+            }
+            
+            // Start with activities tab
+            switchTab('activities');
+            
+            document.getElementById('employeeModal').style.display = 'flex';
+        }
+        
+        // Open modal for editing employee
+        async function editEmployee(id) {
+            const employee = employees.find(e => e.id == id);
+            if (!employee) return;
+            
+            currentEmployeeId = id;
+            document.getElementById('modalTitle').textContent = 'تعديل موظف';
+            document.getElementById('employeeId').value = employee.id;
+            document.getElementById('nom').value = employee.nom;
+            document.getElementById('position').value = employee.position;
+            document.getElementById('telephone').value = employee.telephone;
+            document.getElementById('email').value = employee.email;
+            document.getElementById('hire_date').value = employee.hire_date.split('T')[0];
+            
+            // Enable form fields
+            const form = document.getElementById('employeeForm');
+            const inputs = form.querySelectorAll('input, select, textarea');
+            inputs.forEach(input => input.disabled = false);
+            
+            // Load permissions
+            if (employee.permissions) {
+                for (const [key, value] of Object.entries(employee.permissions)) {
+                    const checkbox = document.querySelector(`input[name="${key}"]`);
+                    if (checkbox) checkbox.checked = value;
+                }
+            }
+            
+            // Start with info tab
+            switchTab('info');
+            
+            document.getElementById('employeeModal').style.display = 'flex';
+        }
+        
+        // Load activities for an employee
+        async function loadActivities(employeeId) {
+            try {
+                // Simulate API call
+                // In a real app, you would fetch from your backend
+                const activities = [
+                    {
+                        id: 1,
+                        employee_id: employeeId,
+                        type: "login",
+                        date: "2025-06-01T08:30:00",
+                        details: "تسجيل دخول إلى النظام"
+                    },
+                    {
+                        id: 2,
+                        employee_id: employeeId,
+                        type: "property",
+                        date: "2025-06-01T09:15:00",
+                        details: "إضافة عقار جديد - فيلا في الدار البيضاء"
+                    },
+                    {
+                        id: 3,
+                        employee_id: employeeId,
+                        type: "sale",
+                        date: "2025-06-02T14:30:00",
+                        details: "إتمام صفقة بيع لعقار رقم #1234"
+                    },
+                    {
+                        id: 4,
+                        employee_id: employeeId,
+                        type: "login",
+                        date: "2025-06-02T08:25:00",
+                        details: "تسجيل دخول إلى النظام"
+                    },
+                    {
+                        id: 5,
+                        employee_id: employeeId,
+                        type: "property",
+                        date: "2025-06-03T10:45:00",
+                        details: "تعديل معلومات العقار رقم #5678"
+                    }
+                ];
+                
+                const container = document.getElementById('activitiesContainer');
+                container.innerHTML = '';
+                
+                if (activities.length > 0) {
+                    activities.forEach(activity => {
+                        let typeText = '';
+                        let activityClass = '';
+                        
+                        switch(activity.type) {
+                            case 'login': 
+                                typeText = 'تسجيل دخول'; 
+                                activityClass = 'login';
+                                break;
+                            case 'property': 
+                                typeText = 'تعديل عقار'; 
+                                activityClass = 'property';
+                                break;
+                            case 'sale': 
+                                typeText = 'معاملة بيع'; 
+                                activityClass = 'sale';
+                                break;
+                            case 'salary':
+                                typeText = 'تعديل الراتب';
+                                activityClass = 'salary';
+                                break;
+                        }
+                        
+                        const activityEl = document.createElement('div');
+                        activityEl.className = `activity-item ${activityClass}`;
+                        activityEl.innerHTML = `
+                            <div class="activity-header">
+                                <span>${typeText}</span>
+                                <span class="activity-date">${new Date(activity.date).toLocaleString()}</span>
+                            </div>
+                            <div class="activity-details">${activity.details}</div>
+                        `;
+                        container.appendChild(activityEl);
+                    });
+                } else {
+                    container.innerHTML = '<p class="text-center py-3">لا يوجد نشاطات مسجلة</p>';
+                }
+            } catch (error) {
+                console.error('Error loading activities:', error);
+            }
+        }
+        
+        // Load performance data for an employee
+        async function loadPerformanceData(employeeId) {
+            try {
+                // Simulate API call
+                // In a real app, you would fetch from your backend
+                const performanceData = {
+                    propertiesAdded: 12,
+                    salesCompleted: 8,
+                    propertiesSold: 5,
+                    totalSales: 4500000
+                };
+                
+                document.getElementById('properties-added').textContent = performanceData.propertiesAdded;
+                document.getElementById('sales-completed').textContent = performanceData.salesCompleted;
+                document.getElementById('properties-sold').textContent = performanceData.propertiesSold;
+                document.getElementById('total-sales').textContent = performanceData.totalSales.toLocaleString();
+                
+                // In a real app, you would render a chart here
+                // For now, we'll just show a message
+                document.getElementById('performanceChart').innerHTML = `
+                    <p class="text-center py-3">سيتم عرض الرسم البياني لأداء الموظف هنا</p>
+                `;
+            } catch (error) {
+                console.error('Error loading performance data:', error);
+            }
+        }
+        
+        // Load attendance records for an employee
+        async function loadAttendanceRecords(employeeId) {
+            try {
+                // Simulate API call
+                // In a real app, you would fetch from your backend
+                const attendanceRecords = [
+                    { date: '2025-06-01', status: 'present', checkIn: '08:30', checkOut: '17:45' },
+                    { date: '2025-06-02', status: 'present', checkIn: '08:45', checkOut: '18:00' },
+                    { date: '2025-06-03', status: 'present', checkIn: '08:35', checkOut: '17:30' },
+                    { date: '2025-06-04', status: 'absent', checkIn: '', checkOut: '' },
+                    { date: '2025-06-05', status: 'present', checkIn: '09:00', checkOut: '17:00' },
+                    { date: '2025-06-06', status: 'present', checkIn: '08:30', checkOut: '13:00' }, // Half day
+                    { date: '2025-06-07', status: 'absent', checkIn: '', checkOut: '' },
+                    { date: '2025-06-08', status: 'present', checkIn: '08:40', checkOut: '17:50' },
+                    { date: '2025-06-09', status: 'present', checkIn: '08:50', checkOut: '18:10' },
+                    { date: '2025-06-10', status: 'present', checkIn: '08:30', checkOut: '17:45' }
+                ];
+                
+                const container = document.getElementById('attendanceRecords');
+                container.innerHTML = '';
+                
+                if (attendanceRecords.length > 0) {
+                    attendanceRecords.forEach(record => {
+                        const date = new Date(record.date);
+                        const dayName = date.toLocaleDateString('ar-EG', { weekday: 'long' });
+                        
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                            <td>${dayName}</td>
+                            <td>${date.toLocaleDateString()}</td>
+                            <td class="${record.status === 'present' ? 'present' : 'absent'}">
+                                ${record.status === 'present' ? 'حاضر' : 'غائب'}
+                            </td>
+                            <td>${record.checkIn || '-'}</td>
+                            <td>${record.checkOut || '-'}</td>
+                        `;
+                        container.appendChild(row);
+                    });
+                } else {
+                    container.innerHTML = '<tr><td colspan="5" class="text-center py-3">لا توجد سجلات حضور</td></tr>';
+                }
+            } catch (error) {
+                console.error('Error loading attendance records:', error);
+            }
+        }
+        
+        // Record attendance (present/absent)
+        async function recordAttendance(status) {
+            if (!currentEmployeeId) return;
+            
+            try {
+                // Simulate API call
+                // In a real app, you would send this to your backend
+                const now = new Date();
+                const timeString = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false });
+                
+                alert(`تم تسجيل ${status === 'present' ? 'حضور' : 'غياب'} الموظف في ${now.toLocaleDateString()} الساعة ${timeString}`);
+                
+                // Reload attendance records
+                loadAttendanceRecords(currentEmployeeId);
+            } catch (error) {
+                console.error('Error recording attendance:', error);
+            }
+        }
+        
+        // Load salary data for an employee
+        async function loadSalaryData(employeeId) {
+            try {
+                const employee = employees.find(e => e.id == employeeId);
+                if (!employee || !employee.salary) return;
+                
+                document.getElementById('base-salary').textContent = employee.salary.base.toLocaleString();
+                document.getElementById('bonus').textContent = employee.salary.bonus.toLocaleString();
+                document.getElementById('deductions').textContent = employee.salary.deductions.toLocaleString();
+                
+                const netSalary = employee.salary.base + employee.salary.bonus - employee.salary.deductions;
+                document.getElementById('net-salary').textContent = netSalary.toLocaleString();
+                
+                // Set form values
+                document.getElementById('salary-amount').value = employee.salary.base;
+                document.getElementById('bonus-amount').value = employee.salary.bonus;
+                document.getElementById('deduction-amount').value = employee.salary.deductions;
+            } catch (error) {
+                console.error('Error loading salary data:', error);
+            }
+        }
+        
+        // Update salary information
+        async function updateSalary() {
+            if (!currentEmployeeId) return;
+            
+            try {
+                const baseSalary = parseFloat(document.getElementById('salary-amount').value) || 0;
+                const bonus = parseFloat(document.getElementById('bonus-amount').value) || 0;
+                const deductions = parseFloat(document.getElementById('deduction-amount').value) || 0;
+                const notes = document.getElementById('salary-notes').value;
+                
+                // Find employee and update salary
+                const employeeIndex = employees.findIndex(e => e.id == currentEmployeeId);
+                if (employeeIndex !== -1) {
+                    employees[employeeIndex].salary = {
+                        base: baseSalary,
+                        bonus: bonus,
+                        deductions: deductions
+                    };
+                    
+                    // Add salary update activity
+                    const now = new Date();
+                    const activity = {
+                        id: Date.now(),
+                        employee_id: currentEmployeeId,
+                        type: "salary",
+                        date: now.toISOString(),
+                        details: `تم تحديث الراتب: الراتب الأساسي ${baseSalary} + الحوافز ${bonus} - الخصومات ${deductions} = ${baseSalary + bonus - deductions}`
+                    };
+                    
+                    // In a real app, you would send this to your backend
+                    alert('تم تحديث معلومات الراتب بنجاح');
+                    
+                    // Reload salary data
+                    loadSalaryData(currentEmployeeId);
+                }
+            } catch (error) {
+                console.error('Error updating salary:', error);
+            }
+        }
+        
+        // Close modal
+        function closeModal() {
+            document.getElementById('employeeModal').style.display = 'none';
+            
+            // Re-enable form fields
+            const form = document.getElementById('employeeForm');
+            const inputs = form.querySelectorAll('input, select, textarea');
+            inputs.forEach(input => input.disabled = false);
+        }
+        
+        // Submit employee form
+        document.getElementById('employeeForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const employeeData = {
+                nom: document.getElementById('nom').value,
+                position: document.getElementById('position').value,
+                telephone: document.getElementById('telephone').value,
+                email: document.getElementById('email').value,
+                hire_date: document.getElementById('hire_date').value,
+                permissions: {
+                    property_view: document.querySelector('input[name="property_view"]').checked,
+                    property_add: document.querySelector('input[name="property_add"]').checked,
+                    property_edit: document.querySelector('input[name="property_edit"]').checked,
+                    property_delete: document.querySelector('input[name="property_delete"]').checked,
+                    client_view: document.querySelector('input[name="client_view"]').checked,
+                    client_add: document.querySelector('input[name="client_add"]').checked,
+                    client_edit: document.querySelector('input[name="client_edit"]').checked,
+                    client_delete: document.querySelector('input[name="client_delete"]').checked,
+                    sale_view: document.querySelector('input[name="sale_view"]').checked,
+                    sale_add: document.querySelector('input[name="sale_add"]').checked,
+                    sale_edit: document.querySelector('input[name="sale_edit"]').checked,
+                    employee_view: document.querySelector('input[name="employee_view"]').checked,
+                    employee_add: document.querySelector('input[name="employee_add"]').checked,
+                    employee_edit: document.querySelector('input[name="employee_edit"]').checked,
+                    employee_delete: document.querySelector('input[name="employee_delete"]').checked
+                }
+            };
+            
+            const id = document.getElementById('employeeId').value;
+            
+            try {
+                // Simulate API call
+                // In a real app, you would send this to your backend
+                if (id) {
+                    // Update existing employee
+                    const index = employees.findIndex(e => e.id == id);
+                    if (index !== -1) {
+                        employees[index] = { ...employees[index], ...employeeData };
+                    }
+                } else {
+                    // Add new employee
+                    const newEmployee = {
+                        id: employees.length > 0 ? Math.max(...employees.map(e => e.id)) + 1 : 1,
+                        ...employeeData,
+                        salary: {
+                            base: 5000,
+                            bonus: 0,
+                            deductions: 0
+                        }
+                    };
+                    employees.push(newEmployee);
+                }
+                
+                alert(id ? 'تم تحديث بيانات الموظف بنجاح' : 'تم إضافة الموظف بنجاح');
+                closeModal();
+                fetchEmployees();
+            } catch (error) {
+                console.error('Error saving employee:', error);
+            }
+        });
+        
+        // Delete employee
+        async function deleteEmployee(id) {
+            if (!confirm('هل أنت متأكد من حذف هذا الموظف؟')) return;
+            
+            try {
+                // Simulate API call
+                // In a real app, you would send this to your backend
+                employees = employees.filter(e => e.id != id);
+                
+                alert('تم حذف الموظف بنجاح');
+                fetchEmployees();
+            } catch (error) {
+                console.error('Error deleting employee:', error);
+            }
+        }
+    </script>
+</body>
+</html>

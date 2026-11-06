@@ -1,0 +1,935 @@
+<html lang="fr" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>نظام إدارة العقارات | لوحة التحكم</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-light: #F2A516;
+            --primary:#080d4e;
+            --secondary: #F2A516;
+            --dark: #1a1a2e;
+            --light: #f8f9fa;
+            --success: #4cc9f0;
+            --warning: #f72585;
+            --gray: #adb5bd;
+            --gray-dark: #495057;
+            --glass: rgba(255, 255, 255, 0.2);
+            --glass-border: rgba(255, 255, 255, 0.3);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Tajawal', 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4e8f0 100%);
+            color: var(--dark);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 2rem auto;
+            padding: 0 1.5rem;
+        }
+        
+        .glass-card {
+            background: var(--glass);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-radius: 20px;
+            border: 1px solid var(--glass-border);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            margin-bottom: 2rem;
+            transition: all 0.3s ease;
+        }
+        
+        .glass-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+        }
+        
+        .card-header {
+            padding: 1.5rem;
+            background: linear-gradient(135deg,  #c3dcdf, #fcffc4);
+            color: rgb(0, 0, 0);
+            display: flex;
+            align-items: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .card-header i {
+            margin-left: 12px;
+            font-size: 1.4rem;
+        }
+        
+        .card-body {
+            padding: 2rem;
+            background: rgba(255, 255, 255, 0.9);
+        }
+        
+        h1 {
+            color: var(--dark);
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+            text-align: center;
+            position: relative;
+            font-size: 2.5rem;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .section-title {
+            font-size: 1.3rem;
+            color: var(--primary);
+            margin: 1.5rem 0;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--primary-light);
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+        }
+        
+        .section-title i {
+            margin-left: 10px;
+            color: var(--secondary);
+        }
+        
+        .form-label {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--dark);
+            display: flex;
+            align-items: center;
+        }
+        
+        .form-label i {
+            margin-left: 8px;
+            color: var(--primary);
+            font-size: 0.9rem;
+        }
+        
+        .form-control, .form-select {
+            border-radius: 10px;
+            padding: 0.8rem 1rem;
+            border: 1px solid #e0e0e0;
+            transition: all 0.3s;
+            background-color: rgba(255, 255, 255, 0.8);
+            font-size: 0.95rem;
+        }
+        
+        .form-control:focus, .form-select:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 0.25rem rgba(67, 97, 238, 0.15);
+            background-color: white;
+        }
+        
+        .form-select {
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: left 1rem center;
+            background-size: 1em;
+        }
+        
+        .file-upload-container {
+            position: relative;
+            margin-bottom: 1.5rem;
+        }
+        
+        .file-upload-label {
+            display: block;
+            padding: 2rem;
+            border: 2px dashed var(--primary-light);
+            border-radius: 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            background-color: rgba(67, 97, 238, 0.05);
+        }
+        
+        .file-upload-label:hover {
+            border-color: var(--primary);
+            background-color: rgba(67, 97, 238, 0.1);
+        }
+        
+        .file-upload-input {
+            position: absolute;
+            left: 0;
+            top: 0;
+            opacity: 0;
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+        }
+        
+        .preview-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        
+        .preview-item {
+            position: relative;
+            width: 120px;
+            height: 120px;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s;
+        }
+        
+        .preview-item:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .preview-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .remove-btn {
+            position: absolute;
+            top: 5px;
+            left: 5px;
+            background: rgba(255, 0, 0, 0.7);
+            color: white;
+            border: none;
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .remove-btn:hover {
+            background: rgba(255, 0, 0, 0.9);
+            transform: scale(1.1);
+        }
+        
+        .btn-primary {  background: linear-gradient(135deg,  #c3dcdf, #fcffc4);
+            color: rgb(0, 0, 0);
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 10px;
+            font-weight: 600;
+            transition: all 0.3s;
+            width: 100%;
+            margin-top: 1rem;
+            font-size: 1rem;
+            box-shadow: 0 4px 15px rgba(67, 97, 238, 0.3);
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            color: #1a1a2e;
+            box-shadow: 0 6px 20px rgb(67, 187, 238);
+        }
+        
+        .btn-primary:active {
+            transform: translateY(1px);
+        }
+        
+        .btn-back {
+            background: rgba(255, 255, 255, 0.9);
+            color: var(--primary);
+            border: 1px solid var(--primary-light);
+            padding: 0.7rem 1.5rem;
+            border-radius: 10px;
+            font-weight: 600;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 1.5rem;
+        }
+        
+        .btn-back i {
+            margin-right: 8px;
+            transition: transform 0.3s;
+        }
+        
+        .btn-back:hover {
+            background: white;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+            color: var(--secondary);
+        }
+        
+        .btn-back:hover i {
+            transform: translateX(-3px);
+        }
+        
+        .spinner-border {
+            vertical-align: middle;
+        }
+        
+        .no-images {
+            color: var(--gray);
+            font-style: italic;
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+            transition: all 0.3s;
+        }
+        
+        .form-group:hover {
+            transform: translateX(5px);
+        }
+
+        /* Search bar styles */
+        .search-container {
+            margin-bottom: 2rem;
+            display: flex;
+            gap: 1rem;
+        }
+        
+        .search-input {
+            flex: 1;
+            padding: 0.8rem 1.5rem;
+            border: 1px solid #e0e0e0;
+            border-radius: 50px;
+            font-size: 1rem;
+            transition: all 0.3s;
+            background-color: rgba(255, 255, 255, 0.8);
+        }
+        
+        .search-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 0.25rem rgba(67, 97, 238, 0.15);
+        }
+        
+        .search-btn {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            padding: 0 1.5rem;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .search-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+        }
+
+        /* Stats cards */
+        .stats-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .stat-card {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 15px;
+            padding: 1.5rem;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        }
+        
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin: 0.5rem 0;
+        }
+        
+        .stat-label {
+            font-size: 1rem;
+            color: var(--gray-dark);
+            font-weight: 600;
+        }
+        
+        @media (max-width: 992px) {
+            .container {
+                padding: 0 1rem;
+            }
+            
+            .card-body {
+                padding: 1.5rem;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .card-body {
+                padding: 1rem;
+            }
+            
+            .section-title {
+                font-size: 1.1rem;
+            }
+            
+            .form-control, .form-select {
+                padding: 0.7rem;
+            }
+            
+            .preview-item {
+                width: 100px;
+                height: 100px;
+            }
+
+            .stats-container {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+        
+        /* Animation de chargement */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .glass-card {
+            animation: fadeIn 0.5s ease-out forwards;
+        }
+        
+        /* Effet de flottement pour les cartes */
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+        
+        .glass-card:hover {
+            animation: float 3s ease-in-out infinite;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <button onclick="window.location.href='admin.html'" class="btn-back">
+            <i class="fas fa-arrow-right"></i>
+            العودة
+        </button>
+        
+        <h1 class="my-4">نظام إدارة العقارات</h1>
+
+
+        <div class="stats-container">
+            <div class="stat-card">
+                <div class="stat-label">إجمالي العقارات</div>
+                <div class="stat-value" id="totalProperties">0</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">عقارات للبيع</div>
+                <div class="stat-value" id="forSale">0</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">عقارات للإيجار</div>
+                <div class="stat-value" id="forRent">0</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">عقارات مباعة</div>
+                <div class="stat-value" id="sold">0</div>
+            </div>
+        </div>
+        
+        <div class="glass-card">
+            <div class="card-header">
+                <i class="fas fa-home"></i>
+                <h2>إضافة عقار جديد</h2>
+            </div>
+            <div class="card-body">
+                <form id="propertyForm" enctype="multipart/form-data">
+                    <div class="section-title">
+                        <i class="fas fa-info-circle"></i>
+                        المعلومات الأساسية
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6 form-group">
+                            <label class="form-label">
+                                <i class="fas fa-heading"></i>
+                                عنوان العقار
+                            </label>
+                            <input type="text" class="form-control" name="title" required placeholder="أدخل عنوان العقار">
+                        </div>
+
+                        <div class="col-md-6 mb-3 form-group">
+                            <label class="form-label">
+                                <i class="fas fa-building"></i>
+                                نوع العقار
+                            </label>
+                            <select class="form-select" name="property_type_id" required>
+                                <option value="">اختر النوع</option>
+                                <!-- Options will be loaded via JavaScript -->
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="mb-4 form-group">
+                        <label class="form-label">
+                            <i class="fas fa-align-left"></i>
+                            وصف العقار
+                        </label>
+                        <textarea class="form-control" name="description" rows="4" required placeholder="أدخل وصفًا تفصيليًا للعقار"></textarea>
+                    </div>
+
+                    <div class="section-title">
+                        <i class="fas fa-map-marker-alt"></i>
+                        الموقع
+                    </div>
+                    <div class="row mb-4">
+                        <div class="col-md-4 mb-3 form-group">
+                            <label class="form-label">
+                                <i class="fas fa-flag"></i>
+                                الولاية
+                            </label>
+                            <input type="text" class="form-control" name="wilaya" required placeholder="أدخل الولاية">
+                        </div>
+                        <div class="col-md-4 mb-3 form-group">
+                            <label class="form-label">
+                                <i class="fas fa-city"></i>
+                                البلدية
+                            </label>
+                            <input type="text" class="form-control" name="baladiya" required placeholder="أدخل البلدية">
+                        </div>
+                        <div class="col-md-4 mb-3 form-group">
+                            <label class="form-label">
+                                <i class="fas fa-street-view"></i>
+                                الحي
+                            </label>
+                            <input type="text" class="form-control" name="neighborhood" required placeholder="أدخل اسم الحي">
+                        </div>
+                    </div>
+   
+                    <div class="section-title">
+                        <i class="fas fa-ruler-combined"></i>
+                        المواصفات
+                    </div>
+                    <div class="row mb-4">
+                        <div class="col-md-3 mb-3 form-group">
+                            <label class="form-label">
+                                <i class="fas fa-vector-square"></i>
+                                المساحة (م²)
+                            </label>
+                            <input type="number" step="0.01" class="form-control" name="area" required placeholder="0.00">
+                        </div>
+                        <div class="col-md-3 mb-3 form-group">
+                            <label class="form-label">
+                                <i class="fas fa-tags"></i>
+                                السعر (دج)
+                            </label>
+                            <input type="number" class="form-control" name="price" required placeholder="أدخل السعر">
+                        </div>
+                        <div class="col-md-2 mb-3 form-group">
+                            <label class="form-label">
+                                <i class="fas fa-door-open"></i>
+                                الغرف
+                            </label>
+                            <input type="number" class="form-control" name="rooms" placeholder="0">
+                        </div>
+                        <div class="col-md-2 mb-3 form-group">
+                            <label class="form-label">
+                                <i class="fas fa-bed"></i>
+                                غرف النوم
+                            </label>
+                            <input type="number" class="form-control" name="bedrooms" placeholder="0">
+                        </div>
+                        <div class="col-md-2 mb-3 form-group">
+                            <label class="form-label">
+                                <i class="fas fa-bath"></i>
+                                الحمامات
+                            </label>
+                            <input type="number" class="form-control" name="bathrooms" placeholder="0">
+                        </div>
+                    </div>
+
+                    <div class="section-title">
+                        <i class="fas fa-info-circle"></i>
+                        معلومات إضافية
+                    </div>
+                    <div class="row mb-4">
+                        <div class="col-md-6 mb-3 form-group">
+                            <label class="form-label">
+                                <i class="fas fa-clipboard-check"></i>
+                                حالة العقار
+                            </label>
+                            <select class="form-select" name="status_id" required>
+                                <option value="">اختر الحالة</option>
+                                <!-- Options will be loaded via JavaScript -->
+                            </select>
+                        </div>
+                        <div class="col-md-6 mb-3 form-group">
+                            <label class="form-label">
+                                <i class="fas fa-file-alt"></i>
+                                رقم الملكية
+                            </label>
+                            <input type="text" class="form-control" name="document_number" placeholder="أدخل رقم الملكية">
+                        </div>
+                    </div>
+
+                    <div class="section-title">
+                        <i class="fas fa-images me-2"></i> صور العقار
+                    </div>
+                    <div class="file-upload-container" id="imageUploadContainer">
+                        <i class="fas fa-camera fa-2x mb-2" style="color: var(--primary);"></i>
+                        <p>اسحب وأفلت الصور هنا أو انقر للاختيار</p>
+                        <input type="file" id="imageUpload" name="images" accept="image/*" multiple class="d-none">
+                    </div>
+                    <div id="imagePreviews" class="preview-container"></div>
+
+                    <!-- Section pour les documents PDF -->
+                    <div class="section-title mt-4">
+                        <i class="fas fa-file-pdf me-2"></i> الوثائق والمستندات
+                    </div>
+                    <div class="file-upload-container" id="docUploadContainer">
+                        <i class="fas fa-file-alt fa-2x mb-2" style="color: var(--primary);"></i>
+                        <p>اسحب وأفلت ملفات PDF هنا أو انقر للاختيار</p>
+                        <input type="file" id="docUpload" name="documents" accept=".pdf" multiple class="d-none">
+                    </div>
+                    <div id="docPreviews" class="preview-container"></div>
+
+                    <button type="submit" class="btn btn-primary mt-4">
+                        <i class="fas fa-save me-2"></i> حفظ العقار
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Initialisation des composants
+        initFileUploads();
+        initFormSubmission();
+        loadDropdownData();
+        loadPropertyStats();
+    });
+
+    /***********************
+     * GESTION DES FICHIERS
+     ***********************/
+    const fileManager = (function() {
+        let images = [];
+        let documents = [];
+        
+        const imageUpload = document.getElementById('imageUpload');
+        const imagePreviews = document.getElementById('imagePreviews');
+        const docUpload = document.getElementById('docUpload');
+        const docPreviews = document.getElementById('docPreviews');
+
+        // Gestion de l'upload des images
+        function handleImageUpload(e) {
+            const files = Array.from(e.target.files);
+            images = [...images, ...files.filter(file => 
+                !images.some(img => 
+                    img.name === file.name && 
+                    img.size === file.size && 
+                    img.lastModified === file.lastModified
+                )
+            )];
+            updateImagePreviews();
+        }
+
+        // Gestion de l'upload des documents
+        function handleDocUpload(e) {
+            const files = Array.from(e.target.files);
+            documents = [...documents, ...files.filter(file => 
+                !documents.some(doc => 
+                    doc.name === file.name && 
+                    doc.size === file.size && 
+                    doc.lastModified === file.lastModified
+                )
+            )];
+            updateDocPreviews();
+        }
+
+        // Mise à jour des aperçus d'images
+        function updateImagePreviews() {
+            imagePreviews.innerHTML = images.length ? '' : 
+                '<p class="text-muted w-100 text-center py-3">لا توجد صور مرفقة</p>';
+            
+            images.forEach((image, index) => {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const previewItem = createPreviewElement(
+                        e.target.result, 
+                        image.name, 
+                        index, 
+                        'image'
+                    );
+                    imagePreviews.appendChild(previewItem);
+                };
+                reader.readAsDataURL(image);
+            });
+        }
+
+        // Mise à jour des aperçus de documents
+        function updateDocPreviews() {
+            docPreviews.innerHTML = documents.length ? '' : 
+                '<p class="text-muted w-100 text-center py-3">لا توجد مستندات مرفقة</p>';
+            
+            documents.forEach((doc, index) => {
+                const previewItem = createPreviewElement(
+                    getFileIcon(doc.type),
+                    doc.name, 
+                    index, 
+                    'document'
+                );
+                docPreviews.appendChild(previewItem);
+            });
+        }
+
+        // Création d'un élément d'aperçu
+        function createPreviewElement(content, filename, index, type) {
+            const previewItem = document.createElement('div');
+            previewItem.className = 'preview-item position-relative m-2';
+            previewItem.style.width = '120px';
+            
+            if (type === 'image') {
+                previewItem.innerHTML = `
+                    <img src="${content}" class="img-thumbnail" style="height:100px;object-fit:cover">
+                    <div class="file-info text-truncate small mt-1">${filename}</div>
+                    <button class="remove-btn btn btn-danger btn-sm position-absolute top-0 end-0 p-0" 
+                            style="width:20px;height:20px;font-size:10px;line-height:1">
+                        &times;
+                    </button>
+                `;
+            } else {
+                previewItem.innerHTML = `
+                    <div class="d-flex justify-content-center align-items-center bg-light" 
+                         style="height:100px;border-radius:5px">
+                        ${content}
+                    </div>
+                    <div class="file-info text-truncate small mt-1">${filename}</div>
+                    <button class="remove-btn btn btn-danger btn-sm position-absolute top-0 end-0 p-0" 
+                            style="width:20px;height:20px;font-size:10px;line-height:1">
+                        &times;
+                    </button>
+                `;
+            }
+            
+            // Gestion de la suppression
+            previewItem.querySelector('.remove-btn').addEventListener('click', (e) => {
+                e.preventDefault();
+                if (type === 'image') {
+                    images.splice(index, 1);
+                    updateImagePreviews();
+                } else {
+                    documents.splice(index, 1);
+                    updateDocPreviews();
+                }
+            });
+            
+            return previewItem;
+        }
+
+        // Obtenir l'icône appropriée pour le type de fichier
+        function getFileIcon(fileType) {
+            if (fileType.includes('pdf')) return '<i class="fas fa-file-pdf text-danger fa-2x"></i>';
+            if (fileType.includes('word')) return '<i class="fas fa-file-word text-primary fa-2x"></i>';
+            if (fileType.includes('excel')) return '<i class="fas fa-file-excel text-success fa-2x"></i>';
+            return '<i class="fas fa-file-alt fa-2x"></i>';
+        }
+
+        // Initialisation
+        function init() {
+            // Images
+            document.getElementById('imageUploadContainer').addEventListener('click', () => imageUpload.click());
+            imageUpload.addEventListener('change', handleImageUpload);
+            
+            // Documents
+            document.getElementById('docUploadContainer').addEventListener('click', () => docUpload.click());
+            docUpload.addEventListener('change', handleDocUpload);
+            
+            // Initialiser les aperçus vides
+            updateImagePreviews();
+            updateDocPreviews();
+        }
+
+        return {
+            init,
+            getImages: () => images,
+            getDocuments: () => documents,
+            clearFiles: () => {
+                images = [];
+                documents = [];
+                updateImagePreviews();
+                updateDocPreviews();
+            }
+        };
+    })();
+
+    /***********************
+     * SOUMISSION DU FORMULAIRE
+     ***********************/
+    function initFormSubmission() {
+        const form = document.getElementById('propertyForm');
+        const submitBtn = form.querySelector('button[type="submit"]');
+        
+        form.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(this);
+            const originalBtnContent = submitBtn.innerHTML;
+            
+            // Ajouter les fichiers au FormData
+            fileManager.getImages().forEach(img => formData.append('images', img));
+            fileManager.getDocuments().forEach(doc => formData.append('documents', doc));
+            
+            // État du bouton pendant le chargement
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = `
+                <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                جاري الحفظ...
+            `;
+            
+            try {
+                const response = await fetch('http://localhost:3000/api/properties', {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.message || 'Network response was not ok');
+                }
+                
+                const result = await response.json();
+                alert('تم حفظ العقار بنجاح');
+                
+                // Réinitialisation
+                this.reset();
+                fileManager.clearFiles();
+                loadPropertyStats(); // Refresh stats after adding property
+            } catch (error) {
+                console.error('Error:', error);
+                alert(`حدث خطأ: ${error.message}`);
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = originalBtnContent;
+            }
+        });
+    }
+
+    /***********************
+     * CHARGEMENT DES DONNÉES
+     ***********************/
+    async function loadDropdownData() {
+        try {
+            await Promise.all([
+                loadDropdownOptions(
+                    'http://localhost:3000/api/property-types',
+                    'select[name="property_type_id"]',
+                    'id',
+                    'name'
+                ),
+                loadDropdownOptions(
+                    'http://localhost:3000/api/property-status',
+                    'select[name="status_id"]',
+                    'id',
+                    'status'
+                )
+            ]);
+        } catch (error) {
+            console.error('Error loading dropdown data:', error);
+            alert('حدث خطأ أثناء تحميل البيانات');
+        }
+    }
+
+    async function loadDropdownOptions(url, selector, valueField, textField) {
+        try {
+            const response = await fetch(url);
+            if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+            
+            const data = await response.json();
+            const selectElement = document.querySelector(selector);
+            
+            // Conserver la valeur sélectionnée si elle existe
+            const selectedValue = selectElement.value;
+            selectElement.innerHTML = '';
+            
+            // Option par défaut
+            const defaultOption = document.createElement('option');
+            defaultOption.value = '';
+            defaultOption.textContent = 'اختر...';
+            selectElement.appendChild(defaultOption);
+            
+            // Ajouter les options
+            data.forEach(item => {
+                const option = document.createElement('option');
+                option.value = item[valueField];
+                option.textContent = item[textField];
+                selectElement.appendChild(option);
+            });
+            
+            // Restaurer la valeur sélectionnée
+            if (selectedValue) {
+                selectElement.value = selectedValue;
+            }
+        } catch (error) {
+            console.error(`Error loading ${selector} options:`, error);
+            throw error;
+        }
+    }
+
+    /***********************
+     * STATISTIQUES ET RECHERCHE
+     ***********************/
+    async function loadPropertyStats() {
+        try {
+            const response = await fetch('http://localhost:3000/api/properties');
+            if (!response.ok) throw new Error('Failed to fetch properties');
+            
+            const properties = await response.json();
+            
+            // Update stats
+            document.getElementById('totalProperties').textContent = properties.length;
+            document.getElementById('forSale').textContent = properties.filter(p => p.status_id === 1).length;
+            document.getElementById('forRent').textContent = properties.filter(p => p.status_id === 2).length;
+            document.getElementById('sold').textContent = properties.filter(p => p.status_id === 3).length;
+        } catch (error) {
+            console.error('Error loading property stats:', error);
+        }
+    }
+
+    function searchProperties() {
+        const searchTerm = document.getElementById('propertySearch').value.toLowerCase();
+        // Implement your search logic here
+        console.log('Searching for:', searchTerm);
+        // You would typically filter properties and display results
+    }
+
+    /***********************
+     * INITIALISATION
+     ***********************/
+    function initFileUploads() {
+        fileManager.init();
+    }
+    </script>
+</body>
+</html>

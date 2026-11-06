@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Connexion</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        :root {
+           
+            --primary-color:#080366;
+            --secondary-color:#276cba;
+            --accent-color: #818cf8;
+            --dark-color: #314464;
+            --light-color: #f8fafc;
+            --error-color: #ef4444;
+            --success-color: #10b981;
+            --text-color: #334155;
+            --border-color: #e2e8f0;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', system-ui, sans-serif;
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #f1f5f9;
+            padding: 20px;
+        }
+
+        .login-container {
+            width: 100%;
+            max-width: 420px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+            transition: transform 0.3s ease;
+        }
+
+        .login-container:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.12);
+        }
+
+   .logo{
+    width: 100px;
+    height:80px;
+    border-radius: 50%;
+    
+    box-shadow: 2px 4px 8px rgb(13, 13, 13);
+    transition: all 0.3s ease;
+    filter: brightness(1.1) contrast(1.1) drop-shadow(0 0 4px rgb(239, 240, 228));
+       }
+
+        .login-header {
+            background:#f4de9b;
+            color: white;
+            padding: 28px 20px;
+            text-align: center;
+            height:200px;
+        }
+
+        .login-header h1 {
+            font-size: 1.6rem;
+            font-weight: 600;
+            color: #000000;
+            margin-bottom: 8px;
+        }
+
+        .login-header i {
+            font-size: 2.2rem;
+            margin-bottom: 12px;
+            color: white;
+        }
+
+        .login-form {
+            padding: 32px;
+        }
+
+        .form-group {
+            position: relative;
+            margin-bottom: 24px;
+        }
+
+        .form-group label {
+            position: absolute;
+            top: 14px;
+            left: 52px;
+            color: var(--text-color);
+            transition: all 0.3s ease;
+            pointer-events: none;
+            font-size: 0.95rem;
+            background: white;
+            padding: 0 8px;
+            border-radius: 4px;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 16px 20px 16px 52px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: white;
+            color: var(--text-color);
+        }
+
+        .form-group input:focus {
+            border-color: #BF9E3B; 
+            box-shadow: 0 0 0 3px rgba(129, 140, 248, 0.2);
+            outline: none;
+        }
+
+        .form-group input:focus + label,
+        .form-group input:valid + label {
+            top: -10px;
+            left: 42px;
+            font-size: 0.85rem;
+            color: #F2A516;   
+            background: white;
+            z-index: 10;
+        }
+
+        .form-group i {
+            position: absolute;
+            top: 16px;
+            left: 20px;
+            color:#F2A516;   
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus ~ i {
+            color:   #F2A516 ;
+            transform: scale(1.1);
+        }
+
+        .btn {
+            width: 100%;
+            padding: 14px;
+            background:#f4de9b;
+            color: rgb(0, 0, 0);
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .btn:hover {
+            background: linear-gradient(to right, #ffbb00,  #F2A516);   
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(79, 70, 229, 0.2);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .forgot-password {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .forgot-password a {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .forgot-password a:hover {
+            color: var(--secondary-color);
+            text-decoration: underline;
+        }
+
+        #errorMessage {
+            color: var(--error-color);
+            background-color: rgba(239, 68, 68, 0.08);
+            border: 1px solid rgba(239, 68, 68, 0.2);
+            border-radius: 8px;
+            padding: 12px;
+            margin-top: 20px;
+            text-align: center;
+            font-size: 0.9rem;
+            font-weight: 500;
+            display: none;
+        }
+
+        .footer-text {
+            text-align: center;
+            margin-top: 24px;
+            color: #64748b;
+            font-size: 0.85rem;
+            padding-bottom: 16px;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .login-container {
+            animation: fadeIn 0.5s ease-out forwards;
+        }
+
+        @media (max-width: 480px) {
+            .login-container {
+                border-radius: 10px;
+            }
+            
+            body {
+                padding: 16px;
+            }
+            
+            .login-header {
+                padding: 24px 16px;
+            }
+            
+            .login-form {
+                padding: 24px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-header">
+           <img src="image/logo.jpg" class="logo">
+            <h1>Connectez-vous à votre compte </h1>
+        </div>
+        
+        <form id="loginForm" class="login-form">
+            <div class="form-group">
+                <i class="fas fa-envelope"></i>
+                <input type="email" id="email" name="email" required>
+                <label for="email">Adresse e-mail</label>
+            </div>
+            
+            <div class="form-group">
+                <i class="fas fa-lock"></i>
+                <input type="password" id="password" name="password" required>
+                <label for="password">Mot de passe</label>
+            </div>
+            
+            <button type="submit" class="btn">
+                <i class="fas fa-sign-in-alt"></i> Se connecter
+            </button>
+            
+            <div id="errorMessage"></div>
+        </form>
+        
+        <div class="footer-text">
+            ©2025. Tous droits réservés.
+        </div>
+    </div>
+    <script>
+      
+document.getElementById("loginForm").addEventListener("submit", async function(e) {
+    e.preventDefault();
+    
+    const email = document.getElementById("email").value.trim();
+    const password = document.getElementById("password").value.trim();
+    const errorElement = document.getElementById("errorMessage");
+
+    try {
+        const response = await fetch('http://localhost:3000/api/login', {
+            method: 'POST',
+            headers: { 
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            },
+            body: JSON.stringify({ email, password })
+        });
+
+        // Handle non-JSON responses
+        const contentType = response.headers.get('content-type');
+        if (!contentType || !contentType.includes('application/json')) {
+            throw new Error("Invalid server response");
+        }
+
+        const data = await response.json();
+
+        if (!response.ok) {
+            throw new Error(data.error || 'Erreur de connexion');
+        }
+
+        // Store user data
+        sessionStorage.setItem('user', JSON.stringify(data));
+
+        // Redirect based on role
+        if (data.role === 'admin') {
+            window.location.href = 'admin.html';
+        } else if (data.role === 'travailleur') {
+            window.location.href = 'travaille.html';
+        } else {
+            throw new Error('Rôle utilisateur inconnu');
+        }
+
+    } catch (error) {
+        errorElement.textContent = error.message;
+        errorElement.style.display = "block";
+        console.error("Login error:", error);
+    }
+});
+</script>
+</body>
+</html>

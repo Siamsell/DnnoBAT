@@ -1,0 +1,947 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>نظام إدارة الزبائن</title>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-light: #F2A516;
+            --primary: #080d4e;
+            --secondary: #F2A516;
+            --dark: #1a1a2e;
+            --light: #f8f9fa;
+            --success: #4cc9f0;
+            --danger: #f72585;
+            --warning: #f8961e;
+            --info: #4895ef;
+            --gray: #adb5bd;
+            --gray-dark: #495057;
+            --glass: rgba(255, 255, 255, 0.2);
+            --glass-border: rgba(255, 255, 255, 0.3);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Tajawal', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4e8f0 100%);
+            color: var(--dark);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 2rem auto;
+            padding: 0 1.5rem;
+        }
+        
+        .glass-card {
+            background: var(--glass);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-radius: 20px;
+            border: 1px solid var(--glass-border);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            margin-bottom: 2rem;
+            transition: all 0.3s ease;
+        }
+        
+        .glass-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+        }
+        
+        .card-header {
+            padding: 1.5rem;
+             background: linear-gradient(135deg,  #c3dcdf, #fcffc4);
+            color: rgb(0, 0, 0);
+            display: flex;
+            align-items: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .card-header i {
+            margin-left: 12px;
+            font-size: 1.4rem;
+        }
+        
+        .card-body {
+            padding: 2rem;
+            background: rgba(255, 255, 255, 0.9);
+        }
+        
+        h1 {
+            color: var(--dark);
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+            text-align: center;
+            position: relative;
+            font-size: 2.5rem;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .btn {
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 1rem;
+        }
+      
+     
+        .btn-primary {
+            background: linear-gradient(135deg,  #c3dcdf, #fcffc4);
+            color: rgb(0, 0, 0);
+            margin-bottom: 40px;
+            box-shadow: 0 4px 15px rgba(67, 97, 238, 0.3);
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(67, 97, 238, 0.4);
+        }
+        
+        .btn-success {
+            background: linear-gradient(135deg, var(--success), #3aa8d1);
+            color: white;
+            box-shadow: 0 4px 15px rgba(76, 201, 240, 0.3);
+        }
+        
+        .btn-success:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(76, 201, 240, 0.4);
+        }
+        
+        .btn-danger {
+            background: linear-gradient(135deg, var(--danger), #d41a6a);
+            color: white;
+margin-bottom: 40px;
+            box-shadow: 0 4px 15px rgba(247, 37, 133, 0.3);
+        }
+        
+        .btn-danger:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(247, 37, 133, 0.4);
+        }
+        
+        .btn-warning {
+            background: linear-gradient(135deg, var(--warning), #e0871b);
+            color: white;
+            box-shadow: 0 4px 15px rgba(248, 150, 30, 0.3);
+        }
+        
+        .btn-warning:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(248, 150, 30, 0.4);
+        }
+        
+        .btn-back {
+            background: rgba(255, 255, 255, 0.9);
+            color: var(--primary);
+            border: 1px solid var(--primary-light);
+            padding: 0.7rem 1.5rem;
+            border-radius: 10px;
+            font-weight:700;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 1.5rem;
+        }
+        
+        .btn-back i {
+            margin-right: 8px;
+            transition: transform 0.3s;
+        }
+        
+        .btn-back:hover {
+            background: white;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+            color: var(--secondary);
+        }
+        
+        .btn-back:hover i {
+            transform: translateX(-3px);
+        }
+        
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        
+        .client-card {
+            position: relative;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s;
+            border-left: 4px solid var(--primary);
+        }
+        
+        .client-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        }
+        
+        .client-card.VIP {
+            border-left-color: var(--warning);
+        }
+        
+        .client-card.chaud {
+            border-left-color: var(--danger);
+        }
+        
+        .client-card.froid {
+            border-left-color: var(--info);
+        }
+        
+        .client-name {
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: var(--dark);
+        }
+        
+        .client-info {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-bottom: 15px;
+        }
+        
+        .client-info div {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.95rem;
+        }
+        
+        .client-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .badge {
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        
+        .badge-primary {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .badge-success {
+            background-color: var(--success);
+            color: white;
+        }
+        
+        .badge-warning {
+            background-color: var(--warning);
+            color: white;
+        }
+        
+        .badge-danger {
+            background-color: var(--danger);
+            color: white;
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .modal-content {
+            background-color: white;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 600px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+        
+        .modal-header {
+            padding: 1.5rem;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top-left-radius: 15px;
+            border-top-right-radius: 15px;
+        }
+        
+        .modal-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin: 0;
+        }
+        
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: white;
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+            padding: 0 1.5rem;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--dark);
+        }
+        
+        input, select, textarea {
+            width: 100%;
+            padding: 0.8rem 1rem;
+            border: 1px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+        
+        input:focus, select:focus, textarea:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 0.25rem rgba(67, 97, 238, 0.15);
+            outline: none;
+        }
+        
+        .form-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 20px;
+            padding: 0 1.5rem 1.5rem;
+        }
+        
+        .interactions-list {
+            margin-top: 1.5rem;
+            padding: 0 1.5rem;
+        }
+        
+        .interaction-item {
+            padding: 1rem;
+            border-left: 3px solid var(--info);
+            margin-bottom: 1rem;
+            background-color: #f8f9fa;
+            border-radius: 10px;
+        }
+        
+        .interaction-item.appel {
+            border-left-color: var(--success);
+        }
+        
+        .interaction-item.visite {
+            border-left-color: var(--warning);
+        }
+        
+        .interaction-item.note {
+            border-left-color: var(--primary);
+        }
+        
+        .interaction-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+        
+        .interaction-date {
+            font-size: 0.8rem;
+            color: var(--gray-dark);
+        }
+        
+        .interaction-form {
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid #eee;
+        }
+        
+        .search-container {
+            margin-bottom: 2rem;
+            display: flex;
+            gap: 1rem;
+        }
+        
+        .search-input {
+            flex: 1;
+            padding: 0.8rem 1.5rem;
+            border: 1px solid #e0e0e0;
+            border-radius: 50px;
+            font-size: 1rem;
+            transition: all 0.3s;
+            background-color: rgba(255, 255, 255, 0.8);
+        }
+        
+        .search-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 0.25rem rgba(67, 97, 238, 0.15);
+        }
+        
+        .search-btn {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            padding: 0 1.5rem;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .search-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+        }
+
+        .stats-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .stat-card {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 15px;
+            padding: 1.5rem;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        }
+        
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin: 0.5rem 0;
+        }
+        
+        .stat-label {
+            font-size: 1rem;
+            color: var(--gray-dark);
+            font-weight: 600;
+        }
+        
+        @media (max-width: 768px) {
+            .grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .stats-container {
+                grid-template-columns: 1fr 1fr;
+            }
+            
+            .client-actions {
+                flex-direction: column;
+            }
+            
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+
+        /* Animation de chargement */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .glass-card {
+            animation: fadeIn 0.5s ease-out forwards;
+        }
+        
+        /* Effet de flottement pour les cartes */
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+        
+        .glass-card:hover {
+            animation: float 3s ease-in-out infinite;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <button onclick="window.location.href='admin.html'" class="btn-back">
+            <i class="fas fa-arrow-right"></i>
+            العودة
+        </button>
+        
+        <h1 class="my-4"><i class="fas fa-users"></i> نظام إدارة الزبائن</h1>
+
+        <div class="search-container">
+            <input type="text" class="search-input" placeholder="ابحث عن الزبائن..." id="clientSearch" oninput="searchClients(this.value)">
+            <button class="search-btn">
+                <i class="fas fa-search"></i>
+            </button>
+        </div>
+        <div class="text-left mb-3">
+    <button  class="btn btn-primary" onclick="openClientModal()">
+        <i class="fas fa-plus"></i> إضافة زبون جديد
+    </button>
+</div>
+
+        <div class="stats-container">
+            <div class="stat-card">
+                <div class="stat-label">إجمالي الزبائن</div>
+                <div class="stat-value" id="total-clients">0</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">زبائن VIP</div>
+                <div class="stat-value" id="vip-clients">0</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">زبائن جادون</div>
+                <div class="stat-value" id="hot-clients">0</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">زبائن باردون</div>
+                <div class="stat-value" id="cold-clients">0</div>
+            </div>
+        </div>
+        
+        <div class="glass-card">
+            <div class="card-header">
+                <i class="fas fa-users"></i>
+                <h2>قائمة الزبائن</h2>
+            </div>
+            <div class="card-body">
+                <div class="grid" id="clients-grid">
+                    <!-- Clients will be loaded here -->
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Client Modal -->
+    <div class="modal" id="clientModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title" id="modalTitle">إضافة زبون جديد</h2>
+                <button class="close-btn" onclick="closeModal()">&times;</button>
+            </div>
+            <form id="clientForm">
+                <input type="hidden" id="clientId">
+                <div class="form-group">
+                    <label for="nom">اسم الزبون</label>
+                    <input type="text" id="nom" required>
+                </div>
+                <div class="form-group">
+                    <label for="telephone">رقم الهاتف</label>
+                    <input type="text" id="telephone" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">البريد الإلكتروني</label>
+                    <input type="email" id="email">
+                </div>
+                <div class="form-group">
+                    <label for="adresse">العنوان</label>
+                    <input type="text" id="adresse">
+                </div>
+                <div class="form-group">
+                    <label for="type_client">نوع الزبون</label>
+                    <select id="type_client" required>
+                        <option value="acheteur">مشتري</option>
+                        <option value="vendeur">بائع</option>
+                        <option value="investisseur">مستثمر</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="type_bien">نوع العقار المطلوب</label>
+                    <input type="text" id="type_bien">
+                </div>
+                <div class="form-group">
+                    <label for="budget">الميزانية (إن وجدت)</label>
+                    <input type="number" id="budget">
+                </div>
+                <div class="form-group">
+                    <label for="statut">حالة الزبون</label>
+                    <select id="statut">
+                        <option value="tiède">فاتر</option>
+                        <option value="chaud">جاد</option>
+                        <option value="froid">غير جاد</option>
+                        <option value="VIP">VIP</option>
+                    </select>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn btn-danger" onclick="closeModal()">إلغاء</button>
+                    <button type="submit" class="btn btn-primary">حفظ</button>
+                </div>
+            </form>
+            
+            <div class="interactions-list" id="interactionsList" style="display: none;">
+                <h3>سجل التواصل</h3>
+                <div id="interactionsContainer"></div>
+                
+                <div class="interaction-form">
+                    <h4>إضافة تفاعل جديد</h4>
+                    <form id="interactionForm">
+                        <div class="form-group">
+                            <label for="interactionType">نوع التفاعل</label>
+                            <select id="interactionType" required>
+                                <option value="appel">مكالمة</option>
+                                <option value="email">بريد إلكتروني</option>
+                                <option value="visite">زيارة</option>
+                                <option value="note">ملاحظة</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="interactionDetails">التفاصيل</label>
+                            <textarea id="interactionDetails" rows="3" required></textarea>
+                        </div>
+                        <div class="form-actions">
+                            <button type="submit" class="btn btn-primary">إضافة</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        let clients = [];
+        
+        // Load clients when page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            fetchClients();
+        });
+        
+        // Fetch all clients
+        async function fetchClients() {
+            try {
+               const response = await fetch('http://localhost:3000/api/clients');
+                clients = await response.json();
+                renderClients(clients);
+                updateStats();
+            } catch (error) {
+                console.error('Error fetching clients:', error);
+            }
+        }
+        
+        // Search clients
+        async function searchClients(query) {
+            if (!query) {
+                renderClients(clients);
+                return;
+            }
+            
+            const filtered = clients.filter(client => 
+                client.nom.toLowerCase().includes(query.toLowerCase()) ||
+                client.telephone.includes(query) ||
+                (client.email && client.email.toLowerCase().includes(query.toLowerCase()))
+            );
+            
+            renderClients(filtered);
+        }
+        
+        // Render clients to the grid
+        function renderClients(clientsToRender) {
+            const grid = document.getElementById('clients-grid');
+            grid.innerHTML = '';
+            
+            if (clientsToRender.length === 0) {
+                grid.innerHTML = '<p class="text-center w-100 py-3">لا يوجد زبائن لعرضهم</p>';
+                return;
+            }
+            
+            clientsToRender.forEach(client => {
+                const clientCard = document.createElement('div');
+                clientCard.className = `client-card ${client.statut}`;
+                
+                let typeText = '';
+                switch(client.type_client) {
+                    case 'acheteur': typeText = 'مشتري'; break;
+                    case 'vendeur': typeText = 'بائع'; break;
+                    case 'investisseur': typeText = 'مستثمر'; break;
+                }
+                
+                let statusText = '';
+                switch(client.statut) {
+                    case 'chaud': statusText = 'جاد'; break;
+                    case 'tiède': statusText = 'فاتر'; break;
+                    case 'froid': statusText = 'غير جاد'; break;
+                    case 'VIP': statusText = 'VIP'; break;
+                }
+                
+                let statusClass = '';
+                switch(client.statut) {
+                    case 'chaud': statusClass = 'badge-danger'; break;
+                    case 'tiède': statusClass = 'badge-primary'; break;
+                    case 'froid': statusClass = 'badge-info'; break;
+                    case 'VIP': statusClass = 'badge-warning'; break;
+                }
+                
+                clientCard.innerHTML = `
+                    <div class="client-name">${client.nom}</div>
+                    <div class="client-info">
+                        <div><i class="fas fa-phone"></i> ${client.telephone}</div>
+                        ${client.email ? `<div><i class="fas fa-envelope"></i> ${client.email}</div>` : ''}
+                        <div><i class="fas fa-user-tag"></i> ${typeText}</div>
+                        <div><span class="badge ${statusClass}">${statusText}</span></div>
+                        ${client.type_bien ? `<div><i class="fas fa-home"></i> يبحث عن: ${client.type_bien}</div>` : ''}
+                        ${client.budget ? `<div><i class="fas fa-money-bill-wave"></i> الميزانية: ${client.budget} دج</div>` : ''}
+                    </div>
+                    <div class="client-actions">
+                        <button class="btn btn-primary" onclick="viewClientDetails(${client.id})">
+                            <i class="fas fa-eye"></i> تفاصيل
+                        </button>
+                        <button class="btn btn-success" onclick="editClient(${client.id})">
+                            <i class="fas fa-edit"></i> تعديل
+                        </button>
+                        <button class="btn btn-danger" onclick="deleteClient(${client.id})">
+                            <i class="fas fa-trash"></i> حذف
+                        </button>
+                    </div>
+                `;
+                
+                grid.appendChild(clientCard);
+            });
+        }
+        
+        // Update statistics
+        function updateStats() {
+            document.getElementById('total-clients').textContent = clients.length;
+            document.getElementById('vip-clients').textContent = clients.filter(c => c.statut === 'VIP').length;
+            document.getElementById('hot-clients').textContent = clients.filter(c => c.statut === 'chaud').length;
+            document.getElementById('cold-clients').textContent = clients.filter(c => c.statut === 'froid').length;
+        }
+        
+        // Open modal for adding new client
+        function openClientModal() {
+            document.getElementById('modalTitle').textContent = 'إضافة زبون جديد';
+            document.getElementById('clientForm').reset();
+            document.getElementById('clientId').value = '';
+            document.getElementById('interactionsList').style.display = 'none';
+            document.getElementById('clientModal').style.display = 'flex';
+        }
+        
+        // Open modal for editing client
+        async function editClient(id) {
+            const client = clients.find(c => c.id == id);
+            if (!client) return;
+            
+            document.getElementById('modalTitle').textContent = 'تعديل زبون';
+            document.getElementById('clientId').value = client.id;
+            document.getElementById('nom').value = client.nom;
+            document.getElementById('telephone').value = client.telephone;
+            document.getElementById('email').value = client.email || '';
+            document.getElementById('adresse').value = client.adresse || '';
+            document.getElementById('type_client').value = client.type_client;
+            document.getElementById('type_bien').value = client.type_bien || '';
+            document.getElementById('budget').value = client.budget || '';
+            document.getElementById('statut').value = client.statut;
+            
+            document.getElementById('interactionsList').style.display = 'none';
+            document.getElementById('clientModal').style.display = 'flex';
+        }
+        
+        // View client details with interactions
+        async function viewClientDetails(id) {
+            const client = clients.find(c => c.id == id);
+            if (!client) return;
+            
+            document.getElementById('modalTitle').textContent = `تفاصيل الزبون: ${client.nom}`;
+            document.getElementById('clientId').value = client.id;
+            document.getElementById('nom').value = client.nom;
+            document.getElementById('telephone').value = client.telephone;
+            document.getElementById('email').value = client.email || '';
+            document.getElementById('adresse').value = client.adresse || '';
+            document.getElementById('type_client').value = client.type_client;
+            document.getElementById('type_bien').value = client.type_bien || '';
+            document.getElementById('budget').value = client.budget || '';
+            document.getElementById('statut').value = client.statut;
+            
+            // Disable form fields
+            const form = document.getElementById('clientForm');
+            const inputs = form.querySelectorAll('input, select, textarea');
+            inputs.forEach(input => input.disabled = true);
+            
+            // Load interactions
+            await loadInteractions(id);
+            
+            document.getElementById('interactionsList').style.display = 'block';
+            document.getElementById('clientModal').style.display = 'flex';
+        }
+        
+        // Load interactions for a client
+        async function loadInteractions(clientId) {
+            try {
+                const response = await fetch(`http://localhost:3000/api/clients/${clientId}`);
+                const data = await response.json();
+                
+                const container = document.getElementById('interactionsContainer');
+                container.innerHTML = '';
+                
+                if (data.interactions && data.interactions.length > 0) {
+                    data.interactions.forEach(interaction => {
+                        let typeText = '';
+                        switch(interaction.type_interaction) {
+                            case 'appel': typeText = 'مكالمة'; break;
+                            case 'email': typeText = 'بريد إلكتروني'; break;
+                            case 'visite': typeText = 'زيارة'; break;
+                            case 'note': typeText = 'ملاحظة'; break;
+                        }
+                        
+                        const interactionEl = document.createElement('div');
+                        interactionEl.className = `interaction-item ${interaction.type_interaction}`;
+                        interactionEl.innerHTML = `
+                            <div class="interaction-header">
+                                <span>${typeText}</span>
+                                <span class="interaction-date">${new Date(interaction.date_interaction).toLocaleString()}</span>
+                            </div>
+                            <div class="interaction-details">${interaction.details}</div>
+                        `;
+                        container.appendChild(interactionEl);
+                    });
+                } else {
+                    container.innerHTML = '<p class="text-center py-3">لا يوجد تفاعلات مسجلة</p>';
+                }
+            } catch (error) {
+                console.error('Error loading interactions:', error);
+            }
+        }
+        
+        // Close modal
+        function closeModal() {
+            document.getElementById('clientModal').style.display = 'none';
+            
+            // Re-enable form fields
+            const form = document.getElementById('clientForm');
+            const inputs = form.querySelectorAll('input, select, textarea');
+            inputs.forEach(input => input.disabled = false);
+        }
+        
+        // Submit client form
+        document.getElementById('clientForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const clientData = {
+                nom: document.getElementById('nom').value,
+                telephone: document.getElementById('telephone').value,
+                email: document.getElementById('email').value,
+                adresse: document.getElementById('adresse').value,
+                type_client: document.getElementById('type_client').value,
+                type_bien: document.getElementById('type_bien').value,
+                budget: document.getElementById('budget').value,
+                statut: document.getElementById('statut').value
+            };
+            
+            const id = document.getElementById('clientId').value;
+            const url = id ? `http://localhost:3000/api/clients/${id}` : 'http://localhost:3000/api/clients';
+            const method = id ? 'PUT' : 'POST';
+            
+            try {
+                const response = await fetch(url, {
+                    method: method,
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(clientData)
+                });
+                
+                const result = await response.json();
+                if (result.message) {
+                    closeModal();
+                    fetchClients();
+                }
+            } catch (error) {
+                console.error('Error saving client:', error);
+            }
+        });
+        
+        // Submit interaction form
+        document.getElementById('interactionForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const interactionData = {
+                type_interaction: document.getElementById('interactionType').value,
+                details: document.getElementById('interactionDetails').value
+            };
+            
+            try {
+                const response = await fetch(`http://localhost:3000/api/clients/${document.getElementById('clientId').value}/interactions`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(interactionData)
+                });
+                
+                const result = await response.json();
+                if (result.message) {
+                    document.getElementById('interactionForm').reset();
+                    loadInteractions(document.getElementById('clientId').value);
+                }
+            } catch (error) {
+                console.error('Error saving interaction:', error);
+            }
+        });
+        
+        // Delete client
+        async function deleteClient(id) {
+            if (!confirm('هل أنت متأكد من حذف هذا الزبون؟')) return;
+            
+            try {
+                const response = await fetch(`http://localhost:3000/api/clients/${id}`, {
+                    method: 'DELETE'
+                });
+                const result = await response.json();
+                if (result.success) {
+                    fetchClients();
+                }
+            } catch (error) {
+                console.error('Error deleting client:', error);
+            }
+        }
+    </script>
+</body>
+</html>

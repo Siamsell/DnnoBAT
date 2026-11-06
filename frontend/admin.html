@@ -1,0 +1,793 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DnnoBAT - Tableau de bord</title>
+    <style>
+        :root {
+            --primary-color:#080d4e;
+            --secondary-color: #F2A516;
+            --accent-color:#ffc71e;
+            --text-color: #ecf0f1;
+            --text-secondary: #bdc3c7;
+            --sidebar-width: 220px;
+            --notification-color: #e3230e;
+            --logo-highlight: #F2BB13;
+            --card-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+            --transition-speed: 0.4s;
+            --border-radius: 12px;
+            --mobile-sidebar-width: 70px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+        }
+
+        body {
+            display: flex;
+            background-color: #f9fafc;
+            color: #2d3436;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        .sidebar {
+            width: var(--sidebar-width);
+            height: 100vh;
+            background: linear-gradient( #f4de9b ,#c6f4ee );
+            color: var(--text-color);
+            position: fixed;
+            padding: 15px 0;
+            transition: all var(--transition-speed) cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 4px 0 20px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            overflow: hidden;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            margin-bottom: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+  
+
+        .logo:hover {
+            transform: translateY(-2px);
+        }
+
+     .logo-img {
+    width: 124px; 
+    height: 65px;
+    margin-right: 15px;  
+    object-fit: contain;
+    border-radius: 20px;
+    box-shadow: 4px 4px 15px rgb(13, 13, 13);
+    transition: all 0.3s ease;
+    filter: brightness(1.1) contrast(1.1) drop-shadow(0 0 4px rgb(239, 240, 228));
+}
+
+      
+
+        .nav-menu {
+            padding: px 0;
+            height: calc(100vh - 120px);
+            overflow-y: auto;
+            scrollbar-width: thin;
+            scrollbar-color: var(--accent-color) transparent;
+        }
+
+        .nav-menu::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        .nav-menu::-webkit-scrollbar-thumb {
+            background-color: var(--accent-color);
+            border-radius: 2px;
+        }
+
+        .nav-item {
+            list-style: none;
+            margin-bottom: 5px;
+            padding: 0 15px;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            padding: 15px 20px;
+            color:#000;
+            text-decoration: none;
+            transition: all var(--transition-speed) ease;
+            font-size: 14px;
+            position: relative;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .nav-link i {
+            margin-right: 15px;
+            font-size: 12px;
+            transition: transform 0.3s ease;
+            min-width: 24px;
+            text-align: center;
+        }
+
+        .nav-link:hover {
+            background: rgb(255, 255, 255);
+            color:#ffc71e;
+            transform: translateX(5px);
+        }
+
+        .nav-link:hover i {
+            transform: scale(1.1);
+            color:#ffc71e;
+        }
+
+        .nav-link.active {
+            background: linear-gradient(90deg, rgb(245, 248, 228) 0%, rgb(254, 255, 166) 100%);
+           color:#08433c;
+            box-shadow: inset 4px 0 0 var(--accent-color);
+        }
+
+        .nav-link.active::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, rgba(255,255,255,0.03) 0%, transparent 100%);
+            z-index: -1;
+        }
+
+        .main-content {
+            flex: 1;
+            margin-left: var(--sidebar-width);
+            padding: 40px;
+            min-height: 100vh;
+            transition: all var(--transition-speed);
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .page-title h1 {
+            font-size: 28px;
+            color: var(--primary-color);
+            font-weight: 700;
+            position: relative;
+            display: inline-block;
+        }
+
+        .page-title h1::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 0;
+            width: 50px;
+            height: 3px;
+            background: var(--accent-color);
+            border-radius: 3px;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .language-selector {
+            display: flex;
+            gap: 8px;
+            background: #f1f3f6;
+            padding: 6px;
+            border-radius: 10px;
+        }
+
+        .lang-btn {
+            padding: 8px 16px;
+            border: none;
+            background: transparent;
+            color: #666;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+
+
+        .lang-btn:hover {
+            background: rgba(0, 0, 0, 0.05);
+        }
+
+        .lang-btn.active {
+            background: var(--accent-color);
+            color: white;
+            box-shadow: 0 4px 12px rgba(39, 174, 96, 0.2);
+        }
+
+        .notifications {
+            position: relative;
+            cursor: pointer;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #f1f3f6;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .notifications:hover {
+            background: #e0e5ec;
+            transform: translateY(-2px);
+        }
+
+        .notification-icon {
+            font-size: 20px;
+            color: var(--secondary-color);
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background-color: var(--notification-color);
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            font-weight: bold;
+            box-shadow: 0 2px 5px rgba(231, 76, 60, 0.3);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        .dashboard-content {
+            background-color: white;
+            border-radius: var(--border-radius);
+            padding: 30px;
+            box-shadow: var(--card-shadow);
+            transition: all 0.3s ease;
+        }
+
+        .dashboard-content:hover {
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .dashboard-content h2 {
+            color: var(--primary-color);
+            margin-bottom: 20px;
+            font-weight: 600;
+            position: relative;
+            padding-bottom: 10px;
+        }
+
+        .dashboard-content h2::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 40px;
+            height: 2px;
+            background: var(--accent-color);
+        }
+
+        .dashboard-content p {
+            color: #555;
+            margin-bottom: 30px;
+            font-size: 16px;
+        }
+
+        #dynamic-content {
+            margin-top: 30px;
+        }
+
+        #dynamic-content h3 {
+            color: var(--secondary-color);
+            margin-bottom: 15px;
+            font-size: 20px;
+        }
+
+        #dynamic-content p {
+            color: #666;
+            margin-bottom: 10px;
+            padding-left: 15px;
+            position: relative;
+        }
+
+        #dynamic-content p::before {
+            content: '•';
+            position: absolute;
+            left: 0;
+            color: var(--accent-color);
+            font-weight: bold;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        #dynamic-content > div {
+            animation: fadeIn 0.5s ease-out forwards;
+        }
+
+     
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at center, rgba(255,255,255,0.2) 0%, transparent 70%);
+            opacity: 0;
+            transition: opacity 0.6s ease;
+        }
+
+        .nav-link:hover::after {
+            opacity: 1;
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 1100;
+            background: var(--accent-color);
+            color: white;
+            border: none;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            font-size: 24px;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            transition: all 0.3s ease;
+        }
+
+        .mobile-menu-btn:hover {
+            transform: scale(1.1);
+        }
+
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 900;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        /* Styles spécifiques pour mobile */
+        @media (max-width: 992px) {
+            .sidebar {
+                transform: translateX(-100%);
+                width: 280px;
+                z-index: 1000;
+            }
+
+            .sidebar.active {
+                transform: translateX(0);
+            }
+
+            .main-content {
+                margin-left: 0;
+                width: 100%;
+            }
+
+            .mobile-menu-btn {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+
+            .overlay.active {
+                display: block;
+                opacity: 1;
+            }
+
+            .logo span {
+                display: inline;
+            }
+
+            .nav-link span {
+                display: inline;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                padding: 20px;
+            }
+
+            .header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+                margin-bottom: 25px;
+            }
+
+            .header-actions {
+                width: 100%;
+                justify-content: space-between;
+            }
+
+            .page-title h1 {
+                font-size: 24px;
+            }
+
+            .dashboard-content {
+                padding: 20px;
+            }
+
+            .dashboard-content h2 {
+                font-size: 20px;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .language-selector {
+                gap: 4px;
+                padding: 4px;
+            }
+
+            .lang-btn {
+                padding: 6px 12px;
+                font-size: 12px;
+            }
+
+            .notifications {
+                width: 36px;
+                height: 36px;
+            }
+
+            .notification-icon {
+                font-size: 18px;
+            }
+
+            .dashboard-content {
+                padding: 15px;
+            }
+
+            #dynamic-content h3 {
+                font-size: 18px;
+            }
+
+            #dynamic-content p {
+                font-size: 14px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .mobile-menu-btn {
+                width: 40px;
+                height: 40px;
+                font-size: 20px;
+                top: 15px;
+                left: 15px;
+            }
+
+            .logo-img {
+                width: 80px;
+                height: 50px;
+            }
+
+            .nav-link {
+                padding: 12px 15px;
+            }
+        }
+
+     
+        @keyframes slideIn {
+            from { transform: translateX(-100%); }
+            to { transform: translateX(0); }
+        }
+
+        .sidebar.active {
+            animation: slideIn 0.3s ease-out;
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <button class="mobile-menu-btn" id="mobileMenuBtn">
+        <i class="fas fa-bars"></i>
+    </button>
+
+    <div class="overlay" id="overlay"></div>
+
+    <aside class="sidebar" id="sidebar">
+        <div class="logo-container">
+            <a href="#" class="logo">
+                <img src="image/logo.jpg" alt="Logo DnnoBAT" class="logo-img">
+            </a>
+        </div>
+        <ul class="nav-menu">
+            <li class="nav-item">
+                <a href="#" class="nav-link active" data-section="dashboard">
+                    <i class="fas fa-home"></i>
+                    <span data-lang="fr">Accueil</span>
+                    <span data-lang="en">Dashboard</span>
+                    <span data-lang="ar">الرئيسية</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="gestion_immobilier.html" class="nav-link" data-section="properties">
+                    <i class="fas fa-building"></i>
+                    <span data-lang="fr">Gestion Immobilière</span>
+                    <span data-lang="en">Property Management</span>
+                    <span data-lang="ar">إدارة العقارات</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="client.html" class="nav-link" data-section="clients">
+                    <i class="fas fa-users"></i>
+                    <span data-lang="fr">Gestion Clients</span>
+                    <span data-lang="en">Clients Management</span>
+                    <span data-lang="ar">إدارة الزبائن</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="gestion des employes.html" class="nav-link" data-section="employees">
+                    <i class="fas fa-user-tie"></i>
+                    <span data-lang="fr">Gestion Employés</span>
+                    <span data-lang="en">Employees Management</span>
+                    <span data-lang="ar">إدارة الموظفين</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link" data-section="transactions">
+                    <i class="fas fa-handshake"></i>
+                    <span data-lang="fr">Gestion Transactions</span>
+                    <span data-lang="en">Transactions</span>
+                    <span data-lang="ar">إدارة الصفقات</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link" data-section="reports">
+                    <i class="fas fa-chart-line"></i>
+                    <span data-lang="fr">Rapports & Statistiques</span>
+                    <span data-lang="en">Reports & Statistics</span>
+                    <span data-lang="ar">التقارير والإحصائيات</span>
+                </a>
+            </li>
+        </ul>
+    </aside>
+
+    <main class="main-content">
+        <div class="header">
+            <div class="page-title">
+                <h1 data-lang="fr">Tableau de Bord</h1>
+                <h1 data-lang="en">Dashboard</h1>
+                <h1 data-lang="ar">لوحة التحكم</h1>
+            </div>
+            <div class="header-actions">
+                <div class="notifications">
+                    <i class="fas fa-bell notification-icon"></i>
+                    <span class="notification-badge">3</span>
+                </div>
+                <div class="language-selector">
+                    <button class="lang-btn active" data-lang="fr">FR</button>
+                    <button class="lang-btn" data-lang="en">EN</button>
+                    <button class="lang-btn" data-lang="ar">AR</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="dashboard-content">
+            <h2 data-lang="fr">Bienvenue dans votre espace DnnoBAT</h2>
+            <h2 data-lang="en">Welcome to your DnnoBAT dashboard</h2>
+            <h2 data-lang="ar">مرحبا بكم في لوحة تحكم DnnoBAT</h2>
+            
+            <p data-lang="fr">Gérez efficacement votre portefeuille immobilier et vos clients.</p>
+            <p data-lang="en">Efficiently manage your real estate portfolio and clients.</p>
+            <p data-lang="ar">إدارة محفظتك العقارية وعملائك بكفاءة</p>
+            
+           
+            <div id="dynamic-content">
+                <div data-section="dashboard">
+                    <div data-lang="fr">
+                        <h3>Résumé des activités</h3>
+                        <p>5 nouvelles propriétés ajoutées cette semaine</p>
+                        <p>3 transactions en cours</p>
+                    </div>
+                    <div data-lang="en">
+                        <h3>Activity summary</h3>
+                        <p>5 new properties added this week</p>
+                        <p>3 ongoing transactions</p>
+                    </div>
+                    <div data-lang="ar">
+                        <h3>ملخص النشاطات</h3>
+                        <p>5 عقارات جديدة أضيفت هذا الأسبوع</p>
+                        <p>3 صفقات جارية</p>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Gestion de la langue
+        let currentLang = 'fr';
+        const langButtons = document.querySelectorAll('.lang-btn');
+        
+        langButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const lang = this.getAttribute('data-lang');
+                changeLanguage(lang);
+                
+                // Animation du bouton cliqué
+                this.style.transform = 'scale(0.95)';
+                setTimeout(() => {
+                    this.style.transform = 'scale(1)';
+                }, 150);
+            });
+        });
+
+        function changeLanguage(lang) {
+            currentLang = lang;
+            
+            // Mettre à jour les boutons de langue
+            langButtons.forEach(btn => {
+                btn.classList.remove('active');
+                if(btn.getAttribute('data-lang') === lang) {
+                    btn.classList.add('active');
+                }
+            });
+            
+            // Mettre à jour tous les éléments avec data-lang (sauf ceux dans .nav-link)
+            document.querySelectorAll('[data-lang]:not(.nav-link span)').forEach(element => {
+                if(element.getAttribute('data-lang') === lang) {
+                    element.style.display = 'block';
+                    element.style.animation = 'fadeIn 0.5s ease-out';
+                } else {
+                    element.style.display = 'none';
+                }
+            });
+            
+            // Gestion spéciale pour les spans dans la navigation
+            document.querySelectorAll('.nav-link').forEach(link => {
+                const spans = link.querySelectorAll('span[data-lang]');
+                spans.forEach(span => {
+                    if(span.getAttribute('data-lang') === lang) {
+                        span.style.display = 'inline';
+                        span.style.animation = 'fadeIn 0.3s ease-out';
+                    } else {
+                        span.style.display = 'none';
+                    }
+                });
+            });
+        }
+
+       // Gestion de la navigation
+const navLinks = document.querySelectorAll('.nav-link');
+navLinks.forEach(link => {
+    link.addEventListener('click', function(e) {
+        const href = this.getAttribute('href');
+        
+        // Si le lien pointe vers une page HTML (.html) ou a un href non vide
+        if (href && (href.endsWith('.html') || href !== '#')) {
+            return; // Laisse le navigateur gérer normalement le lien
+        }
+        
+        e.preventDefault();
+        const section = this.getAttribute('data-section');
+        
+        // Animation du lien cliqué
+        this.style.transform = 'translateX(5px)';
+        setTimeout(() => {
+            this.style.transform = '';
+        }, 200);
+        
+        // Mettre à jour l'état actif
+        navLinks.forEach(l => l.classList.remove('active'));
+        this.classList.add('active');
+        
+        // Charger le contenu dynamique pour la section
+        document.querySelectorAll('#dynamic-content > div').forEach(div => {
+            if(div.getAttribute('data-section') === section) {
+                div.style.display = 'block';
+                div.style.animation = 'fadeIn 0.5s ease-out';
+            } else {
+                div.style.display = 'none';
+            }
+        });
+
+        // Fermer le menu mobile si ouvert
+        if (window.innerWidth <= 992) {
+            toggleMobileMenu();
+        }
+    });
+});
+        // Gestion du menu mobile
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const sidebar = document.getElementById('sidebar');
+        const overlay = document.getElementById('overlay');
+
+        function toggleMobileMenu() {
+            sidebar.classList.toggle('active');
+            overlay.classList.toggle('active');
+            document.body.classList.toggle('no-scroll');
+        }
+
+        mobileMenuBtn.addEventListener('click', toggleMobileMenu);
+        overlay.addEventListener('click', toggleMobileMenu);
+
+        // Initialisation
+        document.addEventListener('DOMContentLoaded', function() {
+            changeLanguage('fr');
+            
+            // Cacher toutes les sections sauf le dashboard
+            document.querySelectorAll('#dynamic-content > div').forEach(div => {
+                if(div.getAttribute('data-section') !== 'dashboard') {
+                    div.style.display = 'none';
+                } else {
+                    div.style.display = 'block';
+                }
+            });
+            
+            // Animation de la notification
+            setInterval(() => {
+                const badge = document.querySelector('.notification-badge');
+                badge.style.transform = 'scale(1.1)';
+                setTimeout(() => {
+                    badge.style.transform = 'scale(1)';
+                }, 300);
+            }, 5000);
+
+            // Détection de la taille d'écran au chargement
+            if (window.innerWidth <= 992) {
+                sidebar.classList.remove('active');
+            }
+        });
+
+        // Gestion du redimensionnement de la fenêtre
+        window.addEventListener('resize', function() {
+            if (window.innerWidth > 992) {
+                sidebar.classList.add('active');
+                overlay.classList.remove('active');
+            } else {
+                sidebar.classList.remove('active');
+            }
+        });
+        
+    </script>
+</body>
+</html>
